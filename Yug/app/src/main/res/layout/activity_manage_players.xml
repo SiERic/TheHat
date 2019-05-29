@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundWhite"
+    tools:context=".activities.ManagePlayersActivity">
+
+    <TextView
+        android:id="@+id/realPlayersNumberView"
+        android:layout_width="32dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:textColor="@color/textBlack"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/lessButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/playersNumberView"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center_vertical"
+        android:text="@string/players"
+        android:textColor="@color/textBlack"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/squareSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/square"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/play"
+        android:textColor="@color/buttonTextWhite"
+        android:background="@color/buttonBackgroundBlack"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ListView
+        android:id="@+id/playersList"
+        android:layout_width="312dp"
+        android:layout_height="430dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playersNumberView" />
+
+    <Button
+        android:id="@+id/lessButton"
+        android:layout_width="32dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/backgroundWhite"
+        android:textColor="@color/buttonTextBlack"
+        android:text="@string/less"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/playersNumberView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/moreButton"
+        android:layout_width="32dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/backgroundWhite"
+        android:textColor="@color/buttonTextBlack"
+        android:text="@string/more"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/realPlayersNumberView"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

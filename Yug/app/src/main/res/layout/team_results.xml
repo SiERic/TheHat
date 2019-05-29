@@ -1,0 +1,34 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <TextView
+        android:id="@+id/placeView"
+        android:gravity="top|center_horizontal"
+        android:textColor="@color/textBlack"
+        android:textSize="20sp"
+        android:layout_width="70dp"
+        android:layout_height="60dp" />
+    <TextView
+        android:id="@+id/nameView"
+        android:gravity="top|start"
+        android:textColor="@color/textBlack"
+        android:textSize="20sp"
+        android:layout_width="190dp"
+        android:layout_height="60dp" />
+    <TextView
+        android:id="@+id/scoreView"
+        android:gravity="top|start"
+        android:textColor="@color/textBlack"
+        android:textSize="20sp"
+        android:layout_width="50dp"
+        android:layout_height="60dp" />
+
+    <TextView
+        android:id="@+id/explainedView"
+        android:gravity="top|center_horizontal"
+        android:textColor="@color/textBlack"
+        android:textSize="20sp"
+        android:layout_width="50dp"
+        android:layout_height="60dp" />
+
+</LinearLayout>

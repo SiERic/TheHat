@@ -1,0 +1,139 @@
+<resources>
+    <string name="app_name">TheHat</string>
+    <string name="title_activity_game_statistics2">GameStatistics2Activity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="player">Player</string>
+    <string name="players">Players: </string>
+    <string name="rename">Rename</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="press_longer">Press longer</string>
+    <string name="big_one">" .----------------. \n| .--------------. |\n| |     __       | |\n| |    /  |      | |\n| |    `| |      | |\n| |     | |      | |\n| |    _| |_     | |\n| |   |_____|    | |\n| |              | |\n| '--------------' |\n '----------------' "</string>
+    <string name="bid_two">" .----------------. \n| .--------------. |\n| |    _____     | |\n| |   / ___ `.   | |\n| |  |_/___) |   | |\n| |   .'____.'   | |\n| |  / /____     | |\n| |  |_______|   | |\n| |              | |\n| '--------------' |\n '----------------' "</string>
+    <string name="bid_three">" .----------------. \n| .--------------. |\n| |    ______    | |\n| |   / ____ `.  | |\n| |   `'  __) |  | |\n| |   _  |__ '.  | |\n| |  | \\____) |  | |\n| |   \\______.'  | |\n| |              | |\n| '--------------' |\n '----------------' "</string>
+    <string name="words_remaining">words remaining</string>
+    <string name="square">Square</string>
+    <string name="next">Next</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="theHat">The Hat</string>
+    <string name="training_mode">Training Mode</string>
+    <string name="offline_game">Offline game</string>
+    <string name="online_game">Online game</string>
+    <string name="settings">Settings</string>
+    <string name="manage_dictionaries">Manage Dictionaries</string>
+    <string name="choose_dictionary">Choose Dictionary</string>
+    <string name="error">Error</string>
+    <string name="skip">Skip</string>
+    <string name="play">play</string>
+    <string name="exit">exit</string>
+    <string name="less"><![CDATA[<]]></string>
+    <string name="more"><![CDATA[>]]></string>
+    <string name="add_new">new</string>
+    <string name="players_in_statistics">players</string>
+    <string name="words_in_statistics">words</string>
+    <string name="place">Place</string>
+    <string name="all">All</string>
+    <string name="word">Word</string>
+    <string name="time">Time</string>
+    <string name="save">Save</string>
+    <string name="format_words_number">%d words</string>
+    <string name="create">Create</string>
+    <string name="join">Join</string>
+    <string name="code_word_instruction">Enter a code word to join a game or create new</string>
+    <string name="add_words">Add words</string>
+    <string name="start_game">Start game</string>
+    <string name="game_already_created_message">Game already exists</string>
+    <string name="game_created_message">Game successfully created</string>
+    <string name="finish">finish</string>
+    <string name="add">add</string>
+    <string name="add_from_camera">📷</string>
+
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+    <string name="low_storage_error">Ocr dependencies cannot be downloaded due to low device storage</string>
+    <string name="title_activity_main">Ocr Detector Sample</string>
+    <string name="ocr_header">Click &quot;Detect Text&quot; to detect text</string>
+    <string name="read_text">Detect Text</string>
+    <string name="auto_focus">Auto Focus</string>
+    <string name="use_flash">Use Flash</string>
+    <string name="ocr_success">Text read successfully</string>
+    <string name="ocr_failure">No text captured</string>
+    <string name="ocr_error">"Error reading text: %1$s"</string>
+
+    <string name="wrong_start_game_message">Only creator can start the game</string>
+    <string name="game_started_message">Game successfully started</string>
+    <string name="words_remaining_format">words remaining : %d</string>
+</resources>
