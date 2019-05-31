@@ -2,22 +2,22 @@ package me.sieric.thehat.activities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import me.sieric.thehat.R;
 
 public class GameCountdownActivity extends AppCompatActivity {
 
     private Timer timer;
-    private TextView count;
+    private TextView countDownView;
 
-    private boolean fl = false;
+    private final int SECOND = (int) TimeUnit.SECONDS.toMillis(1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +25,11 @@ public class GameCountdownActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_game_start);
 
-        count = findViewById(R.id.Count);
-        count.setText(R.string.bid_three);
+        countDownView = findViewById(R.id.countDownView);
+        countDownView.setText(R.string.bid_three);
 
         timer = new Timer();
-        timer.schedule(new FirstTimerTask(), 1000);
+        timer.schedule(new FirstTimerTask(), SECOND);
 
     }
 
@@ -37,8 +37,8 @@ public class GameCountdownActivity extends AppCompatActivity {
         @Override
         public void run() {
             runOnUiThread(() -> {
-                count.setText(R.string.bid_two);
-                timer.schedule(new SecondTimerTask(), 1000);
+                countDownView.setText(R.string.bid_two);
+                timer.schedule(new SecondTimerTask(), SECOND);
             });
         }
     }
@@ -47,8 +47,8 @@ public class GameCountdownActivity extends AppCompatActivity {
         @Override
         public void run() {
             runOnUiThread(() -> {
-                count.setText(getString(R.string.big_one));
-                timer.schedule(new ThirdTimerTask(), 500);
+                countDownView.setText(getString(R.string.big_one));
+                timer.schedule(new ThirdTimerTask(), SECOND / 2);
             });
         }
     }
@@ -56,18 +56,10 @@ public class GameCountdownActivity extends AppCompatActivity {
     private class ThirdTimerTask extends TimerTask {
         @Override
         public void run() {
-            fl = true;
             runOnUiThread(() -> {
                 Intent intent = new Intent(GameCountdownActivity.this, GameActivity.class);
                 startActivity(intent);
             });
-        }
-    }
-
-    protected void onResume() {
-        super.onResume();
-        if (fl) {
-            GameCountdownActivity.this.finish();
         }
     }
 }

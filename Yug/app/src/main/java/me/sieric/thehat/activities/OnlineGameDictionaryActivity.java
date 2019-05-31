@@ -12,9 +12,7 @@ import java.util.List;
 import me.sieric.thehat.R;
 import me.sieric.thehat.logic.DBManager;
 import me.sieric.thehat.logic.Dictionary;
-import me.sieric.thehat.logic.Game;
 import me.sieric.thehat.logic.GameHolder;
-import me.sieric.thehat.logic.Word;
 
 public class OnlineGameDictionaryActivity extends AppCompatActivity {
 
@@ -30,7 +28,7 @@ public class OnlineGameDictionaryActivity extends AppCompatActivity {
         List<Dictionary> dictList = dbManager.getDictionariesList();
         ArrayList<String> dictNames = new ArrayList<>(dictList.size());
         for (int i = 0; i < dictList.size(); i++) {
-            dictNames.add(dictList.get(i).name);
+            dictNames.add(dictList.get(i).getName());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -39,7 +37,7 @@ public class OnlineGameDictionaryActivity extends AppCompatActivity {
         dictListView.setAdapter(adapter);
 
         dictListView.setOnItemClickListener((parent, itemClicked, position, id) -> {
-            GameHolder.dictId = dictList.get(position).id;
+            GameHolder.dictId = dictList.get(position).getId();
             Intent intent;
             intent = new Intent(OnlineGameDictionaryActivity.this, OnlineGameManageWordsActivity.class);
             startActivity(intent);

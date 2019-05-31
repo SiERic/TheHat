@@ -14,8 +14,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import me.sieric.thehat.R;
+import me.sieric.thehat.logic.Game;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.logic.NetworkManager;
+import me.sieric.thehat.logic.OnlineGame;
 import me.sieric.thehat.logic.OnlineGameStatus;
 
 public class OnlineGameMenuActivity extends AppCompatActivity {
@@ -28,6 +30,7 @@ public class OnlineGameMenuActivity extends AppCompatActivity {
     private TimerTask task;
     private final int TIME_STEP = 2000;
     private Button playButton;
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +46,14 @@ public class OnlineGameMenuActivity extends AppCompatActivity {
 
         wordsNumberView = findViewById(R.id.wordNumber);
 
+        game = GameHolder.game;
+
         timer = new Timer();
         task = new UpdateTask();
         timer.scheduleAtFixedRate(task, 0, TIME_STEP);
 
         playButton.setOnClickListener(v -> {
-            if (GameHolder.onlineGame.getPlayerA() != GameHolder.playerId) {
+            if (game.getFirstPlayer() != GameHolder.playerId) {
                 return;
             }
             Toast toast = Toast.makeText(OnlineGameMenuActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
@@ -56,7 +61,7 @@ public class OnlineGameMenuActivity extends AppCompatActivity {
             toast.show();
         });
         playButton.setOnLongClickListener(v -> {
-            if (GameHolder.onlineGame.getPlayerA() != GameHolder.playerId) {
+            if (game.getFirstPlayer() != GameHolder.playerId) {
                 return true;
             }
             Intent intent = new Intent(OnlineGameMenuActivity.this, GameCountdownActivity.class);
@@ -78,7 +83,7 @@ public class OnlineGameMenuActivity extends AppCompatActivity {
                 return true;
             }
             task.cancel();
-            System.out.println("Lolkek");
+//            System.out.println("Lolkek");
             NetworkManager.finishGame(GameHolder.gameId);
             Intent intent = new Intent(OnlineGameMenuActivity.this, GameStatisticsActivity.class);
             startActivity(intent);
@@ -87,12 +92,12 @@ public class OnlineGameMenuActivity extends AppCompatActivity {
     }
 
     private void updateView() {
-        wordsNumberView.setText(String.format(getString(R.string.words_remaining_format),  GameHolder.onlineGame.getWordsNumber() - status.getFinishedWords()));
+        wordsNumberView.setText(String.format(getString(R.string.words_remaining_format),  game.getNumberOfUnfinishedWords()));
 
-        playerAView.setText(GameHolder.onlineGame.getPlayers().get(status.getFirstPlayer()).name);
-        playerBView.setText(GameHolder.onlineGame.getPlayers().get(status.getSecondPlayer()).name);
+        playerAView.setText(game.getPlayersName(game.getFirstPlayer()));
+        playerBView.setText(game.getPlayersName(game.getSecondPlayer()));
 
-        if (GameHolder.onlineGame.getPlayerA() == GameHolder.playerId) {
+        if (game.getFirstPlayer() == GameHolder.playerId) {
             playButton.setVisibility(View.VISIBLE);
         } else {
             playButton.setVisibility(View.INVISIBLE);
@@ -102,11 +107,11 @@ public class OnlineGameMenuActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        System.out.println(GameHolder.onlineGame.getWords());
-        System.out.println(GameHolder.onlineGame.getUnfinishedWordsIds());
-        if (GameHolder.onlineGame.getNumberOfUnguessedWords() == 0) {
+//        System.out.println(game.getWords());
+//        System.out.println(GameHolder.onlineGame.getUnfinishedWordsIds());
+        if (game.getNumberOfUnfinishedWords() == 0) {
             task.cancel();
-            System.out.println("Kekekoko");
+//            System.out.println("Kekekoko");
             NetworkManager.finishGame(GameHolder.gameId);
             Intent intent = new Intent(OnlineGameMenuActivity.this, GameStatisticsActivity.class);
             startActivity(intent);
@@ -114,9 +119,9 @@ public class OnlineGameMenuActivity extends AppCompatActivity {
     }
 
     private void updateWords() {
-        NetworkManager.finishedWords(GameHolder.gameId, status.getFinishedWords() - (GameHolder.onlineGame.getWordsNumber() - GameHolder.onlineGame.getUnfinishedWordsIds().size()), finishedIds -> {
+        NetworkManager.finishedWords(GameHolder.gameId, status.getFinishedWords() - (game.getWordsNumber() - game.getNumberOfUnfinishedWords()), finishedIds -> {
             for (int i = 0; i < finishedIds.size(); i++) {
-                GameHolder.onlineGame.getUnfinishedWordsIds().remove(finishedIds.get(i));
+                ((OnlineGame) game).setWordAsFinished(finishedIds.get(i));
             }
         });
     }
@@ -135,9 +140,8 @@ public class OnlineGameMenuActivity extends AppCompatActivity {
                         return;
                     }
                     status = onlineGameStatus;
-                    GameHolder.onlineGame.setPlayerA(status.getFirstPlayer());
-                    GameHolder.onlineGame.setPlayerB(status.getSecondPlayer());
-                    if (status.getFinishedWords() > (GameHolder.onlineGame.getWordsNumber() - GameHolder.onlineGame.getUnfinishedWordsIds().size())) {
+                    ((OnlineGame) game).setStatus(status);
+                    if (status.getFinishedWords() > (game.getWordsNumber() - game.getNumberOfUnfinishedWords())) {
                         updateWords();
                     }
                     updateView();

@@ -1,10 +1,15 @@
 package me.sieric.thehat.logic;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class Word {
-    public long wordId;
-    public String word;
-    public int time;
-    public Status status;
+
+    private long wordId;
+    private String word;
+    private int time;
+    private Status status;
 
     public Word(long wordId, String word) {
         this.wordId = wordId;
@@ -19,19 +24,20 @@ public class Word {
         this.time = time;
     }
 
+
     public enum Status {
         UNUSED(""),
         USED("-"),
         GUESSED("+"),
         FAILED("x");
 
-        private Status(String string) {
+        Status(String string) {
             this.string = string;
         }
 
         private String string;
 
-        public String toMyString() {
+        public String toStatsString() {
             return string;
         }
 

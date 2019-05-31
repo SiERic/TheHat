@@ -36,7 +36,7 @@ public class DictionaryListActivity extends AppCompatActivity {
         List<Dictionary> dictList = dbManager.getDictionariesList();
         ArrayList<String> dictNames = new ArrayList<>(dictList.size());
         for (int i = 0; i < dictList.size(); i++) {
-            dictNames.add(dictList.get(i).name);
+            dictNames.add(dictList.get(i).getName());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -45,9 +45,8 @@ public class DictionaryListActivity extends AppCompatActivity {
         dictListView.setAdapter(adapter);
 
         dictListView.setOnItemClickListener((parent, itemClicked, position, id) -> {
-            GameHolder.dictId = dictList.get(position).id;
+            GameHolder.dictId = dictList.get(position).getId();
             Intent intent = new Intent(DictionaryListActivity.this, ManageDictionaryActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });
 
@@ -60,7 +59,7 @@ public class DictionaryListActivity extends AppCompatActivity {
                 EditText editText = customLayout.findViewById(R.id.editText);
                 String newName = editText.getText().toString();
                 dbManager.renameDictionary(GameHolder.dictId, newName);
-                dictList.get(position).name = newName;
+                dictList.get(position).setName(newName);
                 dictNames.set(position, newName);
                 adapter.notifyDataSetChanged();
             });
@@ -69,16 +68,16 @@ public class DictionaryListActivity extends AppCompatActivity {
             });
             builder.setNeutralButton("Delete", (dialog, arg1) -> {
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(DictionaryListActivity.this);
-                builder2.setTitle(String.format("Delete \"%s\" dictionary?", dictList.get(position).name));
+                builder2.setTitle(String.format("Delete \"%s\" dictionary?", dictList.get(position).getName()));
                 final View customLayout2 = getLayoutInflater().inflate(R.layout.asking_dialog, null);
                 builder2.setView(customLayout2);
                 builder2.setPositiveButton(getString(R.string.ok), (dialog2, arg2) -> {
                     Dictionary removedDict = dictList.get(position);
-                    dbManager.removeDictionary(removedDict.id);
+                    dbManager.removeDictionary(removedDict.getId());
                     dictList.remove(position);
                     dictNames.remove(position);
                     adapter.notifyDataSetChanged();
-                    Toast toast = Toast.makeText(DictionaryListActivity.this, String.format("Dictionary \"%s\" was successfully removed", removedDict.name), Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(DictionaryListActivity.this, String.format("Dictionary \"%s\" was successfully removed", removedDict.getName()), Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 });

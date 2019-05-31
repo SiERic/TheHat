@@ -23,42 +23,35 @@ public class MainActivity extends AppCompatActivity {
         Button settingsButton = findViewById(R.id.settingsButton);
         Button manageDictionariesButton = findViewById(R.id.manageDictionariesButton);
 
-        View.OnClickListener onClickListenerTrainingModeButton = v -> {
+        trainingModeButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, DictionaryChoiceActivity.class);
-            intent.putExtra("game", "training");
+            intent.putExtra("offlineGame", "training");
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
-        };
-        trainingModeButton.setOnClickListener(onClickListenerTrainingModeButton);
+        });
 
-        View.OnClickListener onClickListenerOfflineGameButton = v -> {
+        offlineGameButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, DictionaryChoiceActivity.class);
-            intent.putExtra("game", "offline");
+            intent.putExtra("offlineGame", "offline");
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
-        };
-        offlineGameButton.setOnClickListener(onClickListenerOfflineGameButton);
+        });
 
-        View.OnClickListener onClickListenerSettingsButton = v -> {
+        settingsButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
-        };
-        settingsButton.setOnClickListener(onClickListenerSettingsButton);
+        });
 
-        View.OnClickListener onClickListenerManageDictionariesButton = v -> {
+        manageDictionariesButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, DictionaryListActivity.class);
             startActivity(intent);
-        };
-        manageDictionariesButton.setOnClickListener(onClickListenerManageDictionariesButton);
+        });
 
-        onlineGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, OnlineGameChooseActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
-            }
+        onlineGameButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, OnlineGameChooseActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
         });
     }
 

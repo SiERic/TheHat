@@ -76,7 +76,7 @@ public class OnlineGameManageWordsActivity extends AppCompatActivity {
             List<String> newWords = new ArrayList<>();
             for (int i = 0; i < words.size(); i++) {
                 if (isChosen.get(i)) {
-                    newWords.add(words.get(i).word);
+                    newWords.add(words.get(i).getWord());
                 }
             }
             NetworkManager.addWords(GameHolder.gameId, newWords);
@@ -89,7 +89,7 @@ public class OnlineGameManageWordsActivity extends AppCompatActivity {
     }
 
     private class WordsAdapter extends ArrayAdapter<Word> {
-        public WordsAdapter(Context context, ArrayList<Word> words) {
+        WordsAdapter(Context context, ArrayList<Word> words) {
             super(context, 0, words);
         }
 
@@ -97,10 +97,14 @@ public class OnlineGameManageWordsActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, @NotNull ViewGroup parent) {
             Word word = getItem(position);
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.words_managment, parent, false);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.words_managment, parent, false);
+            }
 
             if (isChosen.get(position)) {
                 convertView.setBackgroundColor(getColor(R.color.newWordColor));
+            } else {
+                convertView.setBackgroundColor(getColor(R.color.backgroundWhite));
             }
             TextView wordView = convertView.findViewById(R.id.wordView);
             CheckBox isChosenView = convertView.findViewById(R.id.isChosenBox);
@@ -114,7 +118,8 @@ public class OnlineGameManageWordsActivity extends AppCompatActivity {
                 }
             });
 
-            wordView.setText(word.word);
+            assert word != null;
+            wordView.setText(word.getWord());
             isChosenView.setChecked(isChosen.get(position));
 
             return convertView;

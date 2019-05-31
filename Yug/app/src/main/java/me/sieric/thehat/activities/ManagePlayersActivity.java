@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import me.sieric.thehat.logic.DBManager;
-import me.sieric.thehat.logic.Game;
+import me.sieric.thehat.logic.OfflineGame;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.R;
 import me.sieric.thehat.logic.Word;
@@ -135,8 +135,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             } else {
-                Collections.shuffle(words);
-                GameHolder.game = new Game(playersNumber, playersNames, new ArrayList<Word>(words.subList(0, playersNumber * wordsPerPlayer)), isSquare);
+                GameHolder.game = new OfflineGame(playersNumber, playersNames, new ArrayList<>(words.subList(0, playersNumber * wordsPerPlayer)), isSquare);
                 Intent intent = new Intent(ManagePlayersActivity.this, OfflineGameMenuActivity.class);
                 startActivity(intent);
             }

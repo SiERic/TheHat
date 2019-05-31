@@ -31,7 +31,6 @@
         <activity android:name=".activities.DictionaryChoiceActivity" />
         <activity android:name=".activities.GameCountdownActivity" />
         <activity android:name=".activities.GameActivity" />
-        <activity android:name=".activities.TrainingGameMenuActivity" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

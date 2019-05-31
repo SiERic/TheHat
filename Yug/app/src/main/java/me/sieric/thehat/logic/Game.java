@@ -2,134 +2,79 @@ package me.sieric.thehat.logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
-public class Game {
-    private final int playersNumber;
-    private ArrayList<Word> words;
-    private ArrayList<Integer> unguessedWords;
+public abstract class Game {
 
-    private ArrayList<Player> players;
+    protected List<Player> players = new ArrayList<>();
+    protected List<Word> words = new ArrayList<>();
+    protected List<Integer> unfinishedWordsIds = new ArrayList<>();
 
-    private int phase = -1;
-    private boolean isSquare;
-
-    private static final Random RANDOM = new Random();
-
-    public Game(int playersNumber, ArrayList<String> playersNames, ArrayList<Word> words, boolean isSquare) {
-        this.playersNumber = playersNumber;
-        this.isSquare = isSquare;
-
-        players = new ArrayList<>(playersNumber);
-        for (int i = 0; i < playersNumber; i++) {
-            players.add(new Player(playersNames.get(i)));
-        }
-
-        this.words = words;
-
-        unguessedWords = new ArrayList<>(words.size());
-        for (int i = 0; i < words.size(); i++) {
-            unguessedWords.add(i);
-        }
-    }
-
-    public Game(ArrayList<Word> words) {
-        playersNumber = 2;
-        this.isSquare = true;
-
-        players = new ArrayList<>(playersNumber);
-        players.add(new Player("One"));
-        players.add(new Player("Other"));
-
-        this.words = words;
-
-        unguessedWords = new ArrayList<>(words.size());
-        for (int i = 0; i < words.size(); i++) {
-            unguessedWords.add(i);
-        }
-    }
-
-    public int getNumberOfUnguessedWords() {
-        return unguessedWords.size();
-    }
+    protected static final Random RANDOM = new Random();
+    protected boolean isSquare;
+    protected int wordsNumber;
+    protected int playersNumber;
 
     public Word getNextWord() {
-        int index = RANDOM.nextInt(unguessedWords.size());
-        Collections.swap(unguessedWords, index, unguessedWords.size() - 1);
-        words.get(unguessedWords.get(unguessedWords.size() - 1)).status = Word.Status.USED;
-        return words.get(unguessedWords.get(unguessedWords.size() - 1));
+        int index = RANDOM.nextInt(unfinishedWordsIds.size());
+        Collections.swap(unfinishedWordsIds, index, unfinishedWordsIds.size() - 1);
+        words.get(unfinishedWordsIds.get(unfinishedWordsIds.size() - 1)).setStatus(Word.Status.USED);
+        return words.get(unfinishedWordsIds.get(unfinishedWordsIds.size() - 1));
     }
 
-    public void setWordAsGuessed(int time) {
-        words.get(unguessedWords.get(unguessedWords.size() - 1)).status = Word.Status.GUESSED;
-        words.get(unguessedWords.get(unguessedWords.size() - 1)).time += time;
-        players.get(getCurrentPlayerA()).explained++;
-        players.get(getCurrentPlayerB()).guessed++;
-        unguessedWords.remove(unguessedWords.size() - 1);
-    }
-
-    public void setWordAsFailed(int time) {
-        words.get(unguessedWords.get(unguessedWords.size() - 1)).status = Word.Status.FAILED;
-        words.get(unguessedWords.get(unguessedWords.size() - 1)).time += time;
-        unguessedWords.remove(unguessedWords.size() - 1);
-    }
-
-    public void setWordAsSkipped(int time) {
-        words.get(unguessedWords.get(unguessedWords.size() - 1)).time += time;
-    }
-
-    public void increasePhase() {
-        phase++;
-    }
-
-    private int getCurrentPlayerA() {
-        return phase % playersNumber;
-    }
-
-    private int getCurrentPlayerB() {
-        if (isSquare) {
-            return (phase % playersNumber + (phase / playersNumber) % (playersNumber - 1) + 1) % playersNumber;
-        } else {
-            return (phase + playersNumber / 2) % playersNumber;
-        }
-    }
-
-    public String getCurrentPlayerAName() {
-        return players.get(getCurrentPlayerA()).name;
-    }
-
-    public String getCurrentPlayerBName() {
-        return players.get(getCurrentPlayerB()).name;
-    }
-
-    public ArrayList<Player> getPlayersInOrder() {
-        ArrayList<Player> list = new ArrayList<>(players.size());
-        list.addAll(players);
-        Collections.sort(list, (o1, o2) -> (o2.explained + o2.guessed) - (o1.explained + o1.guessed));
-        return list;
-    }
-
-    public ArrayList<Team> getTeamsInOrder() {
-        ArrayList<Team> list = new ArrayList<>(playersNumber / 2);
-        for (int i = 0; i < playersNumber / 2; i++) {
-            list.add(new Team(players.get(i).name, players.get(i + playersNumber / 2).name, players.get(i).explained, players.get(i + playersNumber / 2).explained));
-        }
-        Collections.sort(list, (o1, o2) -> (o2.explainedA + o2.explainedB) - (o1.explainedA + o1.explainedB));
-        return list;
-    }
-
-    public ArrayList<Word> getWordsStats() {
-        ArrayList<Word> list = new ArrayList<>(words.size());
-        for (int i = 0; i < words.size(); i++) {
-            if (words.get(i).status != Word.Status.UNUSED) {
-                list.add(words.get(i));
-            }
-        }
-        Collections.sort(list, (o1, o2) -> o2.time - o1.time);
-        return list;
+    public int getNumberOfUnfinishedWords() {
+        return unfinishedWordsIds.size();
     }
 
     public boolean isSquare() {
         return isSquare;
     }
+
+    public String getPlayersName(int id) {
+        return players.get(id).getName();
+    }
+
+    public ArrayList<Player> getPlayersStats() {
+        ArrayList<Player> playersList = new ArrayList<>(players.size());
+        playersList.addAll(players);
+        Collections.sort(playersList, (o1, o2) -> (o2.getExplained() + o2.getGuessed()) - (o1.getExplained() + o1.getGuessed()));
+        return playersList;
+    }
+
+    public ArrayList<Team> getTeamsStats() {
+        ArrayList<Team> teamsList = new ArrayList<>(playersNumber / 2);
+        for (int i = 0; i < playersNumber / 2; i++) {
+            teamsList.add(new Team(players.get(i).getName(), players.get(i + playersNumber / 2).getName(), players.get(i).getExplained(), players.get(i + playersNumber / 2).getExplained()));
+        }
+        Collections.sort(teamsList, (o1, o2) -> (o2.getFirstPlayerExplained() + o2.getSecondPlayerExplained()) - (o1.getFirstPlayerExplained() + o1.getSecondPlayerExplained()));
+        return teamsList;
+    }
+
+    public ArrayList<Word> getWordsStats() {
+        ArrayList<Word> wordsList = new ArrayList<>(words.size());
+        for (int i = 0; i < words.size(); i++) {
+            if (words.get(i).getStatus() != Word.Status.UNUSED) {
+                wordsList.add(words.get(i));
+            }
+        }
+        Collections.sort(wordsList, (o1, o2) -> o1.getTime() - o2.getTime());
+        return wordsList;
+    }
+
+    public int getWordsNumber() {
+        return wordsNumber;
+    }
+
+    public abstract void setWordAsGuessed(int time);
+
+    public abstract void setWordAsFailed(int time);
+
+    public abstract void setWordAsSkipped(int time);
+
+    public abstract void doPhase();
+
+    public abstract int getFirstPlayer();
+
+    public abstract int getSecondPlayer();
 }

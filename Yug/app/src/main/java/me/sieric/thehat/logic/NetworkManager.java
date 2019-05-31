@@ -2,6 +2,7 @@ package me.sieric.thehat.logic;
 
 import android.util.Log;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,12 +36,12 @@ public class NetworkManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 Log.e(TAG, "request failure", e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
                     JSONObject data = getJsonData(response);
                     boolean ok = "OK".equals(data.getString("status"));
@@ -64,12 +65,12 @@ public class NetworkManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 Log.e(TAG, "request failure", e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
                     JSONObject data = getJsonData(response);
                     System.out.println(data.toString());
@@ -112,11 +113,11 @@ public class NetworkManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
             }
         });
     }
@@ -131,12 +132,12 @@ public class NetworkManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 Log.e(TAG, "request failure", e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
                     JSONObject data = getJsonData(response);
                     System.out.println(data.toString());
@@ -158,12 +159,12 @@ public class NetworkManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 Log.e(TAG, "request failure", e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
                     JSONObject data = getJsonData(response);
                     System.out.println(data.toString());
@@ -189,12 +190,12 @@ public class NetworkManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 Log.e(TAG, "request failure", e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
                     JSONObject data = getJsonData(response);
                     System.out.println(data.toString());
@@ -229,13 +230,13 @@ public class NetworkManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 System.out.println(e.getMessage());
                 Log.e(TAG, "request failure", e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
             }
         });
@@ -249,12 +250,12 @@ public class NetworkManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 Log.e(TAG, "request failure", e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
                     JSONObject data = getJsonData(response);
                     System.out.println(data.toString());
@@ -278,9 +279,9 @@ public class NetworkManager {
         for (int i = 0; i < words.size(); i++) {
             JSONObject word = new JSONObject();
             try {
-                word.put("id", words.get(i).wordId);
-                word.put("time", words.get(i).time);
-                word.put("status", words.get(i).status.toString());
+                word.put("id", words.get(i).getWordId());
+                word.put("time", words.get(i).getTime());
+                word.put("status", words.get(i).getStatus().toString());
                 wordsArray.put(word);
             } catch (JSONException ignored) {}
         }
@@ -295,11 +296,11 @@ public class NetworkManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
             }
         });
     }
@@ -312,12 +313,12 @@ public class NetworkManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 Log.e(TAG, "request failure", e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
                     JSONObject data = getJsonData(response);
                     System.out.println(data.toString());

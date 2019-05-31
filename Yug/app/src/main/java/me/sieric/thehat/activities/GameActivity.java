@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -18,8 +17,6 @@ import java.util.concurrent.TimeUnit;
 import me.sieric.thehat.logic.Game;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.R;
-import me.sieric.thehat.logic.NetworkManager;
-import me.sieric.thehat.logic.OnlineGame;
 import me.sieric.thehat.logic.Word;
 
 public class GameActivity extends AppCompatActivity {
@@ -31,8 +28,9 @@ public class GameActivity extends AppCompatActivity {
     private int time;
     private int beginningTimeOfCurrentWord;
     private Word currentWord;
+    private Game game;
 
-    private final int SECOND = (int) TimeUnit.SECONDS.toMillis(1);
+    private final int SECOND = (int)TimeUnit.SECONDS.toMillis(1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,76 +45,43 @@ public class GameActivity extends AppCompatActivity {
         Button errorButton = findViewById(R.id.errorButton);
         Button skipButton = findViewById(R.id.skipButton);
 
+        game = GameHolder.game;
         time = 0;
         beginningTimeOfCurrentWord = 0;
         remainingTimeView.setText(getBeautifulTime(time));
-        if (!GameHolder.isOffline) {
-            GameHolder.onlineGame.setPhaseWords(new ArrayList<>());
-        }
 
         timer = new Timer();
         timer.schedule(new First20SecondsTimerTask(), SECOND);
 
-        if (GameHolder.isOffline) {
-            currentWord = GameHolder.game.getNextWord();
-        } else {
-            currentWord = GameHolder.onlineGame.getNextWord();
-        }
-        currentWordView.setText(currentWord.word);
+        currentWord = game.getNextWord();
+        currentWordView.setText(currentWord.getWord());
 
-        View.OnClickListener onClickListenerOkButton = v -> {
-            if (GameHolder.isOffline) {
-                GameHolder.game.setWordAsGuessed(time - beginningTimeOfCurrentWord + 1);
-            } else {
-                GameHolder.onlineGame.setWordAsGuessed(time - beginningTimeOfCurrentWord + 1);
-            }
+        okButton.setOnClickListener(v -> {
+            game.setWordAsGuessed(time - beginningTimeOfCurrentWord + 1);
 
-            int numberOfUnguessedWords;
-            if (GameHolder.isOffline) {
-                numberOfUnguessedWords = GameHolder.game.getNumberOfUnguessedWords();
-            } else {
-                numberOfUnguessedWords = GameHolder.onlineGame.getNumberOfUnguessedWords();
-            }
-
-            if (time >= 20 || numberOfUnguessedWords == 0) {
-                sentPhaseData();
+            if (time >= 20 || game.getNumberOfUnfinishedWords() == 0) {
+                game.doPhase();
                 GameActivity.this.onBackPressed();
             } else {
-                if (GameHolder.isOffline) {
-                    currentWord = GameHolder.game.getNextWord();
-                } else {
-                    currentWord = GameHolder.onlineGame.getNextWord();
-                }
-                currentWordView.setText(currentWord.word);
-                currentWordView.setText(currentWord.word);
+                currentWord = game.getNextWord();
+                currentWordView.setText(currentWord.getWord());
                 beginningTimeOfCurrentWord = time;
             }
-        };
-        okButton.setOnClickListener(onClickListenerOkButton);
+        });
 
-        View.OnLongClickListener onLongClickListenerButton = v -> {
-            if (GameHolder.isOffline) {
-                GameHolder.game.setWordAsFailed(time - beginningTimeOfCurrentWord + 1);
-            } else {
-                GameHolder.onlineGame.setWordAsFailed(time - beginningTimeOfCurrentWord + 1);
-            }
-            sentPhaseData();
+        errorButton.setOnLongClickListener(v -> {
+            game.setWordAsFailed(time - beginningTimeOfCurrentWord + 1);
+            game.doPhase();
             GameActivity.this.onBackPressed();
             return true;
-        };
-        errorButton.setOnLongClickListener(onLongClickListenerButton);
+        });
 
-        View.OnLongClickListener onLongClickListenerSkipButton = v -> {
-            if (GameHolder.isOffline) {
-                GameHolder.game.setWordAsSkipped(time - beginningTimeOfCurrentWord + 1);
-            } else {
-                GameHolder.onlineGame.setWordAsSkipped(time - beginningTimeOfCurrentWord + 1);
-            }
-            sentPhaseData();
+        skipButton.setOnLongClickListener(v -> {
+            game.setWordAsSkipped(time - beginningTimeOfCurrentWord + 1);
+            game.doPhase();
             GameActivity.this.onBackPressed();
             return true;
-        };
-        skipButton.setOnLongClickListener(onLongClickListenerSkipButton);
+        });
 
         View.OnClickListener onClickListenerErrorAndSkipButton = v -> {
             Toast toast = Toast.makeText(GameActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
@@ -125,13 +90,6 @@ public class GameActivity extends AppCompatActivity {
         };
         errorButton.setOnClickListener(onClickListenerErrorAndSkipButton);
         skipButton.setOnClickListener(onClickListenerErrorAndSkipButton);
-    }
-
-    private void sentPhaseData() {
-        if (GameHolder.isOffline) {
-            return;
-        }
-        NetworkManager.doPhase(GameHolder.gameId, GameHolder.onlineGame.getPhaseWords());
     }
 
     private class First20SecondsTimerTask extends TimerTask {
@@ -176,8 +134,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private String getBeautifulTime(int time) {
-        return String.format("%02d:%02d", time / 60, time % 60);
+        return String.format(getString(R.string.time_format), time / 60, time % 60);
     }
-
 
 }

@@ -27,8 +27,6 @@ public class OnlineGameChooseActivity extends AppCompatActivity {
         joinButton = findViewById(R.id.joinButton);
         gameIdText = findViewById(R.id.gameIdText);
 
-        gameIdText.setText("kek");
-
         createButton.setOnClickListener(v -> {
             String gameId = gameIdText.getText().toString();
             NetworkManager.createGame(gameId, ok ->
@@ -52,7 +50,6 @@ public class OnlineGameChooseActivity extends AppCompatActivity {
                                 });
                             });
                         }
-
                     }));
         });
 
@@ -61,7 +58,7 @@ public class OnlineGameChooseActivity extends AppCompatActivity {
             NetworkManager.gameStatus(gameId, onlineGameStatus -> runOnUiThread(() -> {
                 OnlineGameStatus.GameStatus status = onlineGameStatus.getGameStatus();
                 if (status.equals(OnlineGameStatus.GameStatus.CREATED)) {
-                    Toast toast = Toast.makeText(OnlineGameChooseActivity.this, "Successfully joined the game", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(OnlineGameChooseActivity.this, "Successfully joined the offlineGame", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                     GameHolder.gameId = gameId;
@@ -76,11 +73,11 @@ public class OnlineGameChooseActivity extends AppCompatActivity {
                     });
 
                 } else if (status.equals(OnlineGameStatus.GameStatus.RUNNING)) {
-                    Toast toast = Toast.makeText(OnlineGameChooseActivity.this, "Game already started", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(OnlineGameChooseActivity.this, "OfflineGame already started", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 } else {
-                    Toast toast = Toast.makeText(OnlineGameChooseActivity.this, "Game doesn't exists", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(OnlineGameChooseActivity.this, "OfflineGame doesn't exists", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,6 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import me.sieric.thehat.R;
 import me.sieric.thehat.logic.DBManager;
@@ -85,11 +83,11 @@ public class ManageDictionaryActivity extends AppCompatActivity {
             toast.show(); });
         saveButton.setOnLongClickListener(v -> {
             for (int i = 0; i < isChosen.size(); i++) {
-                if (!isChosen.get(i) && words.get(i).wordId != -1) {
-                    dbManager.remove(words.get(i).wordId, GameHolder.dictId);
+                if (!isChosen.get(i) && words.get(i).getWordId() != -1) {
+                    dbManager.remove(words.get(i).getWordId(), GameHolder.dictId);
                 }
-                if (isChosen.get(i) && words.get(i).wordId == -1) {
-                    dbManager.add(words.get(i).word, GameHolder.dictId);
+                if (isChosen.get(i) && words.get(i).getWordId() == -1) {
+                    dbManager.add(words.get(i).getWord(), GameHolder.dictId);
                 }
             }
             for (long wordId : replacedWords) {
@@ -125,15 +123,12 @@ public class ManageDictionaryActivity extends AppCompatActivity {
         });
 
         Button addFromCameraButton = findViewById(R.id.addFromCameraButton);
-        addFromCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ManageDictionaryActivity.this, OcrCaptureActivity.class);
-                intent.putExtra(OcrCaptureActivity.AutoFocus, true);
-                intent.putExtra(OcrCaptureActivity.UseFlash, false);
+        addFromCameraButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ManageDictionaryActivity.this, OcrCaptureActivity.class);
+            intent.putExtra(OcrCaptureActivity.AutoFocus, true);
+            intent.putExtra(OcrCaptureActivity.UseFlash, false);
 
-                startActivityForResult(intent, RC_OCR_CAPTURE);
-            }
+            startActivityForResult(intent, RC_OCR_CAPTURE);
         });
     }
 
@@ -166,7 +161,7 @@ public class ManageDictionaryActivity extends AppCompatActivity {
     }
 
     private class WordsAdapter extends ArrayAdapter<Word> {
-        public WordsAdapter(Context context, ArrayList<Word> words) {
+        private WordsAdapter(Context context, ArrayList<Word> words) {
             super(context, 0, words);
         }
 
@@ -174,7 +169,9 @@ public class ManageDictionaryActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, @NotNull ViewGroup parent) {
             Word word = getItem(position);
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.words_managment, parent, false);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.words_managment, parent, false);
+            }
 
             convertView.setOnLongClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ManageDictionaryActivity.this);
@@ -183,7 +180,7 @@ public class ManageDictionaryActivity extends AppCompatActivity {
                 builder.setView(customLayout);
                 builder.setPositiveButton(getString(R.string.ok), (dialog, arg1) -> {
                     EditText editText = customLayout.findViewById(R.id.editText);
-                    replacedWords.add(words.get(position).wordId);
+                    replacedWords.add(words.get(position).getWordId());
                     words.set(position, new Word(-1, editText.getText().toString()));
                     isChosen.set(position, true);
                     isNew.set(position, true);
@@ -198,6 +195,8 @@ public class ManageDictionaryActivity extends AppCompatActivity {
             });
             if (isNew.get(position)) {
                 convertView.setBackgroundColor(getColor(R.color.newWordColor));
+            } else {
+                convertView.setBackgroundColor(getColor(R.color.backgroundWhite));
             }
             TextView wordView = convertView.findViewById(R.id.wordView);
             CheckBox isChosenView = convertView.findViewById(R.id.isChosenBox);
@@ -212,7 +211,8 @@ public class ManageDictionaryActivity extends AppCompatActivity {
                 }
             });
 
-            wordView.setText(word.word);
+            assert word != null;
+            wordView.setText(word.getWord());
             isChosenView.setChecked(isChosen.get(position));
 
             return convertView;

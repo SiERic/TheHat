@@ -1,6 +1,10 @@
 package me.sieric.thehat.logic;
 
+import lombok.Getter;
+
+@Getter
 public class OnlineGameStatus {
+
     public enum GameStatus {
         CREATED, RUNNING, FINISHED, DOES_NOT_EXISTS;
     }
@@ -27,33 +31,5 @@ public class OnlineGameStatus {
         this.secondPlayer = secondPlayer;
         this.finishedWords = finishedWords;
         this.isSquare = isSquare;
-    }
-
-    public GameStatus getGameStatus() {
-        return gameStatus;
-    }
-
-    public int getWordsNumber() {
-        return wordsNumber;
-    }
-
-    public int getPlayersNumber() {
-        return playersNumber;
-    }
-
-    public int getFirstPlayer() {
-        return firstPlayer;
-    }
-
-    public int getSecondPlayer() {
-        return secondPlayer;
-    }
-
-    public int getFinishedWords() {
-        return finishedWords;
-    }
-
-    public boolean isSquare() {
-        return isSquare;
     }
 }

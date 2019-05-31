@@ -1,9 +1,15 @@
 package me.sieric.thehat.logic;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class Player {
-    public String name;
-    public int explained;
-    public int guessed;
+
+    private String name;
+    private int explained;
+    private int guessed;
+
     public Player(String name) {
         this.name = name;
     }

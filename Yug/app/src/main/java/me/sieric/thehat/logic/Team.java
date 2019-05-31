@@ -1,15 +1,19 @@
 package me.sieric.thehat.logic;
 
-public class Team {
-    public String nameA;
-    public String nameB;
-    public int explainedA;
-    public int explainedB;
+import lombok.Getter;
 
-    public Team(String nameA, String nameB, int explainedA, int explainedB) {
-        this.nameA = nameA;
-        this.nameB = nameB;
-        this.explainedA = explainedA;
-        this.explainedB = explainedB;
+@Getter
+public class Team {
+
+    private String firstPlayerName;
+    private String secondPlayerName;
+    private int firstPlayerExplained;
+    private int secondPlayerExplained;
+
+    public Team(String firstPlayerName, String secondPlayerName, int firstPlayerExplained, int secondPlayerExplained) {
+        this.firstPlayerName = firstPlayerName;
+        this.secondPlayerName = secondPlayerName;
+        this.firstPlayerExplained = firstPlayerExplained;
+        this.secondPlayerExplained = secondPlayerExplained;
     }
 }

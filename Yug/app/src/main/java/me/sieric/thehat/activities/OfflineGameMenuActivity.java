@@ -30,13 +30,12 @@ public class OfflineGameMenuActivity extends AppCompatActivity {
 
         wordNumber = findViewById(R.id.wordNumber);
 
-        View.OnLongClickListener onLongClickListenerPlayButton = v -> {
+        playButton.setOnLongClickListener(v -> {
             Intent intent = new Intent(OfflineGameMenuActivity.this, GameCountdownActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
             return true;
-        };
-
-        playButton.setOnLongClickListener(onLongClickListenerPlayButton);
+        });
 
         View.OnClickListener onClickListenerPlayAndExitButton = v -> {
             Toast toast = Toast.makeText(OfflineGameMenuActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
@@ -50,30 +49,24 @@ public class OfflineGameMenuActivity extends AppCompatActivity {
         playerA = findViewById(R.id.PlayerA);
         playerB = findViewById(R.id.PlayerB);
 
-        playerA.setTextSize(24);
-        playerB.setTextSize(24);
-
-        View.OnLongClickListener onLongClickListenerExitButton = v -> {
+        exitButton.setOnLongClickListener(v -> {
             Intent intent = new Intent(OfflineGameMenuActivity.this, GameStatisticsActivity.class);
             startActivity(intent);
             return true;
-        };
-
-        exitButton.setOnLongClickListener(onLongClickListenerExitButton);
+        });
     }
 
         @Override
         protected void onStart() {
             super.onStart();
 
-            if (GameHolder.game.getNumberOfUnguessedWords() == 0) {
+            if (GameHolder.game.getNumberOfUnfinishedWords() == 0) {
                 Intent intent = new Intent(OfflineGameMenuActivity.this, GameStatisticsActivity.class);
                 startActivity(intent);
             } else {
-                GameHolder.game.increasePhase();
-                wordNumber.setText(String.format(getString(R.string.words_remaining_format),  GameHolder.game.getNumberOfUnguessedWords()));
-                playerA.setText(GameHolder.game.getCurrentPlayerAName());
-                playerB.setText(GameHolder.game.getCurrentPlayerBName());
+                wordNumber.setText(String.format(getString(R.string.words_remaining_format),  GameHolder.game.getNumberOfUnfinishedWords()));
+                playerA.setText(GameHolder.game.getPlayersName(GameHolder.game.getFirstPlayer()));
+                playerB.setText(GameHolder.game.getPlayersName(GameHolder.game.getSecondPlayer()));
             }
         }
 }

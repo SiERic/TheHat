@@ -136,4 +136,7 @@
     <string name="wrong_start_game_message">Only creator can start the game</string>
     <string name="game_started_message">Game successfully started</string>
     <string name="words_remaining_format">words remaining : %d</string>
+    <string name="time_format">%02d:%02d</string>
+    <string name="team_results_format">%d %d</string>
+    <string name="team_names_format">%s %s</string>
 </resources>

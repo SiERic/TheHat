@@ -87,7 +87,6 @@ public class OnlineGameManagePlayersActivity extends AppCompatActivity {
                     playersPerm.add(i);
                 }
                 NetworkManager.startGame(GameHolder.gameId, playersPerm, true);
-                GameHolder.isOffline = false;
                 ArrayList<Player> players = new ArrayList<>();
                 for (int i = 0; i < playersNames.size(); i++) {
                     players.add(new Player(playersNames.get(i)));
@@ -102,10 +101,8 @@ public class OnlineGameManagePlayersActivity extends AppCompatActivity {
                             System.out.println("!!!!!!!!!  " + words.get(i));
                         }
                         onlineGame.setWords(words_);
-                        onlineGame.setWordsNumber(words_.size());
-                        onlineGame.setUnfinishedWordsIds(ids);
                         onlineGame.setPlayers(players);
-                        GameHolder.onlineGame = onlineGame;
+                        GameHolder.game = onlineGame;
                         Toast toast = Toast.makeText(OnlineGameManagePlayersActivity.this, getString(R.string.game_started_message), Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
@@ -126,7 +123,6 @@ public class OnlineGameManagePlayersActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (onlineGameStatus.getGameStatus().equals(OnlineGameStatus.GameStatus.RUNNING)) {
                         task.cancel();
-                        GameHolder.isOffline = false;
                         ArrayList<Player> players = new ArrayList<>();
                         for (int i = 0; i < playersNames.size(); i++) {
                             players.add(new Player(playersNames.get(i)));
@@ -146,17 +142,13 @@ public class OnlineGameManagePlayersActivity extends AppCompatActivity {
                                     ids.add(i);
                                 }
                                 onlineGame.setWords(words_);
-                                onlineGame.setWordsNumber(words_.size());
-                                onlineGame.setUnfinishedWordsIds(ids);
                                 onlineGame.setPlayers(players);
-                                GameHolder.onlineGame = onlineGame;
                                 Intent intent = new Intent(OnlineGameManagePlayersActivity.this, OnlineGameMenuActivity.class);
                                 startActivity(intent);
                             });
                         });
                     }
-                    onlineGame.setWordsNumber(onlineGameStatus.getWordsNumber());
-                    wordsNumberView.setText(String.valueOf(onlineGame.getWordsNumber()));
+                    wordsNumberView.setText(onlineGameStatus.getWordsNumber());
                 });
             });
             NetworkManager.allPlayers(GameHolder.gameId, playersNames_ -> {

@@ -23,8 +23,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import me.sieric.thehat.R;
+import me.sieric.thehat.logic.Game;
 import me.sieric.thehat.logic.GameHolder;
-import me.sieric.thehat.logic.NetworkManager;
 import me.sieric.thehat.logic.Player;
 import me.sieric.thehat.logic.Team;
 import me.sieric.thehat.logic.Word;
@@ -74,56 +74,27 @@ public class GameStatisticsActivity extends AppCompatActivity {
         ListView playersListView = findViewById(R.id.playersView);
         ListView wordsListView = findViewById(R.id.wordsView);
 
-        if (GameHolder.isOffline) {
-            if (GameHolder.game.isSquare()) {
-                ArrayList<Player> players = GameHolder.game.getPlayersInOrder();
-                players.add(0, new Player(""));
-                PlayerResultsAdapter adapter = new PlayerResultsAdapter(this, players);
-                playersListView.setAdapter(adapter);
-            } else {
-                ArrayList<Team> teams = GameHolder.game.getTeamsInOrder();
-                teams.add(0, new Team("", "", 0, 0));
-                TeamResultsAdapter adapter = new TeamResultsAdapter(this, teams);
-                playersListView.setAdapter(adapter);
-            }
-            ArrayList<Word> words = GameHolder.game.getWordsStats();
-            words.add(0, new Word(0, "!"));
-            WordStatsAdapter wordsStatsAdapter = new WordStatsAdapter(this, words);
-            wordsListView.setAdapter(wordsStatsAdapter);
+        Game game = GameHolder.game;
+
+        if (game.isSquare()) {
+            ArrayList<Player> players = game.getPlayersStats();
+            players.add(0, new Player(""));
+            PlayerResultsAdapter adapter = new PlayerResultsAdapter(this, players);
+            playersListView.setAdapter(adapter);
         } else {
-            NetworkManager.playersStats(GameHolder.gameId, players -> {
-                runOnUiThread(() -> {
-                    GameHolder.onlineGame.setPlayers(players);
-                    if (GameHolder.onlineGame.isSquare()) {
-                        ArrayList<Player> players1 = GameHolder.onlineGame.getPlayersInOrder();
-                        players1.add(0, new Player(""));
-                        PlayerResultsAdapter adapter = new PlayerResultsAdapter(this, players1);
-                        playersListView.setAdapter(adapter);
-                    } else {
-                        ArrayList<Team> teams = GameHolder.onlineGame.getTeamsInOrder();
-                        teams.add(0, new Team("", "", 0, 0));
-                        TeamResultsAdapter adapter = new TeamResultsAdapter(this, teams);
-                        playersListView.setAdapter(adapter);
-                    }
-                });
-            });
-            NetworkManager.wordsStats(GameHolder.gameId, words -> {
-                runOnUiThread(() -> {
-                    for (int i = 0; i < words.size(); i++) {
-                        GameHolder.onlineGame.getWords().get(i).time = words.get(i).time;
-                        GameHolder.onlineGame.getWords().get(i).status = words.get(i).status;
-                    }
-                    ArrayList<Word> words1 = GameHolder.onlineGame.getWordsStats();
-                    words1.add(0, new Word(0, "!"));
-                    WordStatsAdapter wordsStatsAdapter = new WordStatsAdapter(this, words1);
-                    wordsListView.setAdapter(wordsStatsAdapter);
-                });
-            });
+            ArrayList<Team> teams = game.getTeamsStats();
+            teams.add(0, new Team("", "", 0, 0));
+            TeamResultsAdapter adapter = new TeamResultsAdapter(this, teams);
+            playersListView.setAdapter(adapter);
         }
+        ArrayList<Word> words = game.getWordsStats();
+        words.add(0, new Word(0, "!"));
+        WordStatsAdapter wordsStatsAdapter = new WordStatsAdapter(this, words);
+        wordsListView.setAdapter(wordsStatsAdapter);
     }
 
     private class PlayerResultsAdapter extends ArrayAdapter<Player> {
-        public PlayerResultsAdapter(Context context, ArrayList<Player> players) {
+        PlayerResultsAdapter(Context context, ArrayList<Player> players) {
             super(context, 0, players);
         }
 
@@ -148,10 +119,11 @@ public class GameStatisticsActivity extends AppCompatActivity {
                 guessedView.setText("<-");
             } else {
                 placeView.setText(String.valueOf(position));
-                nameView.setText(player.name);
-                scoreView.setText(String.valueOf(player.explained + player.guessed));
-                explainedView.setText(String.valueOf(player.explained));
-                guessedView.setText(String.valueOf(player.guessed));
+                assert player != null;
+                nameView.setText(player.getName());
+                scoreView.setText(String.valueOf(player.getExplained() + player.getGuessed()));
+                explainedView.setText(String.valueOf(player.getExplained()));
+                guessedView.setText(String.valueOf(player.getGuessed()));
             }
 
             return convertView;
@@ -159,7 +131,7 @@ public class GameStatisticsActivity extends AppCompatActivity {
     }
 
     private class TeamResultsAdapter extends ArrayAdapter<Team> {
-        public TeamResultsAdapter(Context context, ArrayList<Team> teams) {
+        TeamResultsAdapter(Context context, ArrayList<Team> teams) {
             super(context, 0, teams);
         }
 
@@ -182,9 +154,10 @@ public class GameStatisticsActivity extends AppCompatActivity {
                 explainedView.setText("->");
             } else {
                 placeView.setText(String.valueOf(position));
-                nameView.setText(team.nameA + '\n' + team.nameB);
-                scoreView.setText(String.valueOf(team.explainedA + team.explainedB));
-                explainedView.setText(String.valueOf(team.explainedA) + '\n' + String.valueOf(team.explainedB));
+                assert team != null;
+                nameView.setText(String.format(getString(R.string.team_names_format), team.getFirstPlayerName(), team.getSecondPlayerName()));
+                scoreView.setText(String.valueOf(team.getFirstPlayerExplained() + team.getSecondPlayerExplained()));
+                explainedView.setText(String.format(getString(R.string.team_results_format), team.getFirstPlayerExplained(), team.getSecondPlayerExplained()));
             }
 
             return convertView;
@@ -192,7 +165,7 @@ public class GameStatisticsActivity extends AppCompatActivity {
     }
 
     private class WordStatsAdapter extends ArrayAdapter<Word> {
-        public WordStatsAdapter(Context context, ArrayList<Word> words) {
+        WordStatsAdapter(Context context, ArrayList<Word> words) {
             super(context, 0, words);
         }
 
@@ -212,9 +185,10 @@ public class GameStatisticsActivity extends AppCompatActivity {
                 timeView.setText(getString(R.string.time));
                 isGuessedView.setText("?");
             } else {
-                wordView.setText(word.word);
-                timeView.setText(String.valueOf(word.time));
-                isGuessedView.setText(word.status.toMyString());
+                assert word != null;
+                wordView.setText(word.getWord());
+                timeView.setText(String.valueOf(word.getTime()));
+                isGuessedView.setText(word.getStatus().toStatsString());
             }
             return convertView;
         }
