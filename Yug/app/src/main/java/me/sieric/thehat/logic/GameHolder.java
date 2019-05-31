@@ -1,5 +1,7 @@
 package me.sieric.thehat.logic;
 
+import me.sieric.thehat.logic.games.Game;
+
 public class GameHolder {
     public static Game game;
     public static long dictId;

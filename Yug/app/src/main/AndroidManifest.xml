@@ -15,22 +15,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.OnlineGameManageWordsActivity"></activity>
-        <activity android:name=".activities.OnlineGameDictionaryActivity" />
-        <activity android:name=".activities.OnlineGameMenuActivity" />
-        <activity android:name=".activities.ManageDictionaryActivity" />
-        <activity android:name=".activities.OnlineGameManagePlayersActivity" />
-        <activity android:name=".activities.OnlineGameChooseActivity" />
-        <activity android:name=".activities.GameStatisticsActivity" />
-        <activity android:name=".activities.DictionaryListActivity" />
+        <activity android:name=".activities.onlineGame.AddWordsActivity"></activity>
+        <activity android:name=".activities.onlineGame.DictionaryListActivity" />
+        <activity android:name=".activities.onlineGame.MenuActivity" />
+        <activity android:name=".activities.dictionaryManagment.ManageDictionaryActivity" />
+        <activity android:name=".activities.onlineGame.ManagePlayersActivity" />
+        <activity android:name=".activities.onlineGame.CreateJoinActivity" />
+        <activity android:name=".activities.game.StatisticsActivity" />
+        <activity android:name=".activities.dictionaryManagment.DictionaryListActivity" />
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name=".activities.settings.SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".activities.ManagePlayersActivity" />
-        <activity android:name=".activities.OfflineGameMenuActivity" />
-        <activity android:name=".activities.DictionaryChoiceActivity" />
-        <activity android:name=".activities.GameCountdownActivity" />
-        <activity android:name=".activities.GameActivity" />
+        <activity android:name=".activities.offlineGame.ManagePlayersActivity" />
+        <activity android:name=".activities.offlineGame.MenuActivity" />
+        <activity android:name=".activities.offlineGame.DictionaryListActivity" />
+        <activity android:name=".activities.game.CountdownActivity" />
+        <activity android:name=".activities.game.GameActivity" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import me.sieric.thehat.R;
+import me.sieric.thehat.activities.offlineGame.DictionaryListActivity;
+import me.sieric.thehat.activities.onlineGame.CreateJoinActivity;
+import me.sieric.thehat.activities.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,14 +26,14 @@ public class MainActivity extends AppCompatActivity {
         Button manageDictionariesButton = findViewById(R.id.manageDictionariesButton);
 
         trainingModeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, DictionaryChoiceActivity.class);
+            Intent intent = new Intent(MainActivity.this, DictionaryListActivity.class);
             intent.putExtra("offlineGame", "training");
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });
 
         offlineGameButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, DictionaryChoiceActivity.class);
+            Intent intent = new Intent(MainActivity.this, DictionaryListActivity.class);
             intent.putExtra("offlineGame", "offline");
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
@@ -44,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         manageDictionariesButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, DictionaryListActivity.class);
+            Intent intent = new Intent(MainActivity.this, me.sieric.thehat.activities.dictionaryManagment.DictionaryListActivity.class);
             startActivity(intent);
         });
 
         onlineGameButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, OnlineGameChooseActivity.class);
+            Intent intent = new Intent(MainActivity.this, CreateJoinActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });

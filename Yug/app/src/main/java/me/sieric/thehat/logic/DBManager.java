@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.List;
 
 import me.sieric.thehat.R;
+import me.sieric.thehat.logic.data.Dictionary;
+import me.sieric.thehat.logic.data.Word;
 
 public class DBManager extends SQLiteOpenHelper {
 

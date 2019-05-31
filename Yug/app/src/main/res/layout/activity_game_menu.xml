@@ -5,10 +5,10 @@
     android:background="@color/backgroundWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.TrainingGameMenuActivity">
+    tools:context=".activities.offlineGame.MenuActivity">
 
     <TextView
-        android:id="@+id/PlayerB"
+        android:id="@+id/secondPlayerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -23,7 +23,7 @@
         tools:textSize="36sp" />
 
     <TextView
-        android:id="@+id/PlayerA"
+        android:id="@+id/firstPlayerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -50,7 +50,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/wordNumber"
+        android:id="@+id/wordsNumberView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
