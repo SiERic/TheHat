@@ -18,11 +18,11 @@
         <activity android:name=".activities.onlineGame.AddWordsActivity"></activity>
         <activity android:name=".activities.onlineGame.DictionaryListActivity" />
         <activity android:name=".activities.onlineGame.MenuActivity" />
-        <activity android:name=".activities.dictionaryManagment.ManageDictionaryActivity" />
+        <activity android:name=".activities.dictionaryManagement.ManageDictionaryActivity" />
         <activity android:name=".activities.onlineGame.ManagePlayersActivity" />
         <activity android:name=".activities.onlineGame.CreateJoinActivity" />
         <activity android:name=".activities.game.StatisticsActivity" />
-        <activity android:name=".activities.dictionaryManagment.DictionaryListActivity" />
+        <activity android:name=".activities.dictionaryManagement.DictionaryListActivity" />
         <activity
             android:name=".activities.settings.SettingsActivity"
             android:label="@string/title_activity_settings" />

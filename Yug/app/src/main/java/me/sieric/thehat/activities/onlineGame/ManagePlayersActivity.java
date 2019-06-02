@@ -143,7 +143,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
                             });
                         });
                     }
-                    wordsNumberView.setText(onlineGameStatus.getWordsNumber());
+                    wordsNumberView.setText(String.valueOf(onlineGameStatus.getWordsNumber()));
                 });
             });
             NetworkManager.allPlayers(GameHolder.gameId, playersNames_ -> {

@@ -1,4 +1,4 @@
-package me.sieric.thehat.activities.dictionaryManagment;
+package me.sieric.thehat.activities.dictionaryManagement;
 
 import android.app.AlertDialog;
 import android.content.Intent;

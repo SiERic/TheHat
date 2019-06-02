@@ -3,6 +3,7 @@ package me.sieric.thehat.activities.offlineGame;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -33,7 +34,6 @@ public class ManagePlayersActivity extends AppCompatActivity {
     private Button moreButton;
 
     private int playersNumber = 6;
-    private int wordsPerPlayer = 10;
     private ArrayList<String> playersNames;
 
     private boolean isSquare = false;
@@ -55,7 +55,8 @@ public class ManagePlayersActivity extends AppCompatActivity {
         squareSwitch.setChecked(false);
 
         playersNames = new ArrayList<>();
-        for (int i = 0; i < playersNumber; i++) {
+        playersNames.add(GameHolder.name);
+        for (int i = 1; i < playersNumber; i++) {
             playersNames.add(getString(R.string.player) + String.valueOf(i + 1));
         }
 
@@ -128,6 +129,8 @@ public class ManagePlayersActivity extends AppCompatActivity {
 
         View.OnLongClickListener onLongClickListenerNextButton = v -> {
             DBManager dbManager = new DBManager(this);
+            int wordsPerPlayer = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("words_per_player", "10"));
+            GameHolder.name = PreferenceManager.getDefaultSharedPreferences(this).getString("name", "kek");
             ArrayList<Word> words = dbManager.getWordsList(GameHolder.dictId);
             if (words.size() < playersNumber * wordsPerPlayer) {
                 Toast toast = Toast.makeText(ManagePlayersActivity.this, "There are too few words in the dictionary", Toast.LENGTH_SHORT);

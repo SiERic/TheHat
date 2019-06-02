@@ -1,6 +1,7 @@
 package me.sieric.thehat.activities.onlineGame;
 
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -26,6 +27,8 @@ public class CreateJoinActivity extends AppCompatActivity {
         createButton = findViewById(R.id.createButton);
         joinButton = findViewById(R.id.joinButton);
         gameIdText = findViewById(R.id.gameIdText);
+
+        GameHolder.name = PreferenceManager.getDefaultSharedPreferences(this).getString("name", "kek");
 
         createButton.setOnClickListener(v -> {
             String gameId = gameIdText.getText().toString();

@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         manageDictionariesButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, me.sieric.thehat.activities.dictionaryManagment.DictionaryListActivity.class);
+            Intent intent = new Intent(MainActivity.this, me.sieric.thehat.activities.dictionaryManagement.DictionaryListActivity.class);
             startActivity(intent);
         });
 
