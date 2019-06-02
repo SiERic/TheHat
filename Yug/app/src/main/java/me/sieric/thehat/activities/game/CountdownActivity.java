@@ -57,7 +57,8 @@ public class CountdownActivity extends AppCompatActivity {
         @Override
         public void run() {
             runOnUiThread(() -> {
-                Intent intent = new Intent(CountdownActivity.this, GameActivity.class);
+                Intent intent;
+                intent = new Intent(CountdownActivity.this, GameActivity.class);
                 startActivity(intent);
             });
         }

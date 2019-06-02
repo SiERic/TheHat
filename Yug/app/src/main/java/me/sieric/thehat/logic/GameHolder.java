@@ -9,4 +9,11 @@ public class GameHolder {
     public static int playerId;
     public static boolean isCreator;
     public static String gameId;
+    public static GameType gameType;
+
+    public enum GameType {
+        ONLINE,
+        OFFLINE,
+        ONE_TO_OTHERS;
+    }
 }

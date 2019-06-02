@@ -160,6 +160,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("name"));
             bindPreferenceSummaryToValue(findPreference("words_per_player"));
+            bindPreferenceSummaryToValue(findPreference("explanation_time"));
         }
 
         @Override

@@ -22,12 +22,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/trainingModeButton"
+        android:id="@+id/oneToOthersButton"
         android:layout_width="228dp"
         android:layout_height="56dp"
         android:layout_marginTop="24dp"
         android:background="@color/buttonBackgroundBlack"
-        android:text="@string/training_mode"
+        android:text="@string/one_to_others"
         android:textColor="@color/buttonTextWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
         android:background="@color/buttonBackgroundBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trainingModeButton" />
+        app:layout_constraintTop_toBottomOf="@+id/oneToOthersButton" />
 
     <Button
         android:id="@+id/onlineGameButton"

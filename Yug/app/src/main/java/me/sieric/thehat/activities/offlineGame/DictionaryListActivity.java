@@ -42,13 +42,11 @@ public class DictionaryListActivity extends AppCompatActivity {
 
         dictListView.setOnItemClickListener((parent, itemClicked, position, id) -> {
             GameHolder.dictId = dictList.get(position).getId();
-            String gameType = getIntent().getStringExtra("offlineGame");
             Intent intent;
-            if (gameType.equals("training")) {
+            if (GameHolder.gameType == GameHolder.GameType.ONE_TO_OTHERS) {
                 ArrayList<Word> words = dbManager.getWordsList(GameHolder.dictId);
                 GameHolder.game = new OfflineGame(words);
                 intent = new Intent(DictionaryListActivity.this, MenuActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             } else /*if (gameType.equals("offline"))*/ {
                 intent = new Intent(DictionaryListActivity.this, ManagePlayersActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

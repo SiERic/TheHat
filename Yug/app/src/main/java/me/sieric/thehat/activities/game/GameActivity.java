@@ -2,6 +2,7 @@ package me.sieric.thehat.activities.game;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -29,6 +30,7 @@ public class GameActivity extends AppCompatActivity {
     private int beginningTimeOfCurrentWord;
     private Word currentWord;
     private Game game;
+    private int explanationTime;
 
     private final int SECOND = (int)TimeUnit.SECONDS.toMillis(1);
 
@@ -48,7 +50,10 @@ public class GameActivity extends AppCompatActivity {
         game = GameHolder.game;
         time = 0;
         beginningTimeOfCurrentWord = 0;
-        remainingTimeView.setText(getBeautifulTime(time));
+
+        explanationTime = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("explanation_time", "20"));
+
+        remainingTimeView.setText(getBeautifulTime(explanationTime));
 
         timer = new Timer();
         timer.schedule(new First20SecondsTimerTask(), SECOND);
@@ -59,10 +64,14 @@ public class GameActivity extends AppCompatActivity {
         okButton.setOnClickListener(v -> {
             game.setWordAsGuessed(time - beginningTimeOfCurrentWord + 1);
 
-            if (time >= 20 || game.getNumberOfUnfinishedWords() == 0) {
+            if (time >= explanationTime || game.getNumberOfUnfinishedWords() == 0) {
                 game.doPhase();
                 GameActivity.this.onBackPressed();
             } else {
+                if (GameHolder.gameType == GameHolder.GameType.ONE_TO_OTHERS) {
+                    time = 0;
+                    remainingTimeView.setText(getBeautifulTime(explanationTime));
+                }
                 currentWord = game.getNextWord();
                 currentWordView.setText(currentWord.getWord());
                 beginningTimeOfCurrentWord = time;
@@ -97,8 +106,8 @@ public class GameActivity extends AppCompatActivity {
         public void run() {
             time++;
             runOnUiThread(() -> {
-                remainingTimeView.setText(getBeautifulTime(20 - time));
-                if (time < 20) {
+                remainingTimeView.setText(getBeautifulTime(explanationTime - time));
+                if (time < explanationTime) {
                     timer.schedule(new First20SecondsTimerTask(), SECOND);
                 } else {
                     timer.schedule(new Next3SecondsTimerTask(), SECOND);
@@ -113,8 +122,8 @@ public class GameActivity extends AppCompatActivity {
             time++;
             runOnUiThread(() -> {
                 remainingTimeView.setTextColor(Color.DKGRAY);
-                remainingTimeView.setText(getBeautifulTime(time - 20));
-                if (time < 23) {
+                remainingTimeView.setText(getBeautifulTime(time - explanationTime));
+                if (time < explanationTime + 3) {
                     timer.schedule(new Next3SecondsTimerTask(), SECOND);
                 } else {
                     timer.schedule(new LastTimerTask(), SECOND);
@@ -128,7 +137,7 @@ public class GameActivity extends AppCompatActivity {
         public void run() {
             time++;
             runOnUiThread(() -> remainingTimeView.setTextColor(Color.GRAY));
-            remainingTimeView.setText(getBeautifulTime(time - 20));
+            remainingTimeView.setText(getBeautifulTime(time - explanationTime));
             timer.schedule(new LastTimerTask(), SECOND);
         }
     }

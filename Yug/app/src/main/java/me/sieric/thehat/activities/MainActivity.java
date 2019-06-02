@@ -10,6 +10,7 @@ import me.sieric.thehat.R;
 import me.sieric.thehat.activities.offlineGame.DictionaryListActivity;
 import me.sieric.thehat.activities.onlineGame.CreateJoinActivity;
 import me.sieric.thehat.activities.settings.SettingsActivity;
+import me.sieric.thehat.logic.GameHolder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,22 +20,22 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
-        Button trainingModeButton = findViewById(R.id.trainingModeButton);
+        Button oneToOthersButton = findViewById(R.id.oneToOthersButton);
         Button offlineGameButton = findViewById(R.id.offlineGameButton);
         Button onlineGameButton = findViewById(R.id.onlineGameButton);
         Button settingsButton = findViewById(R.id.settingsButton);
         Button manageDictionariesButton = findViewById(R.id.manageDictionariesButton);
 
-        trainingModeButton.setOnClickListener(v -> {
+        oneToOthersButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, DictionaryListActivity.class);
-            intent.putExtra("offlineGame", "training");
+            GameHolder.gameType = GameHolder.GameType.ONE_TO_OTHERS;
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });
 
         offlineGameButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, DictionaryListActivity.class);
-            intent.putExtra("offlineGame", "offline");
+            GameHolder.gameType = GameHolder.GameType.OFFLINE;
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });

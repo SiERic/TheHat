@@ -30,6 +30,20 @@
         <item>30</item>
     </string-array>
 
+    <string-array name="pref_explanation_time">
+        <item>15 seconds</item>
+        <item>20 seconds</item>
+        <item>25 seconds</item>
+        <item>30 seconds</item>
+    </string-array>
+
+    <string-array name="pref_explanation_time_values">
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+    </string-array>
+
     <string name="theHat">The Hat</string>
     <string name="training_mode">Training Mode</string>
     <string name="offline_game">Offline game</string>
@@ -79,6 +93,7 @@
     <string name="game_started_message">Game successfully started</string>
     <string name="words_remaining_format">words remaining : %d</string>
     <string name="time_format">%02d:%02d</string>
-    <string name="team_results_format">%d %d</string>
-    <string name="team_names_format">%s %s</string>
+    <string name="team_results_format">%d\n%d</string>
+    <string name="team_names_format">%s\n%s</string>
+    <string name="one_to_others">One to others game</string>
 </resources>
