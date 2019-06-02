@@ -1,7 +1,9 @@
 package me.sieric.thehat.activities.game;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
     private Word currentWord;
     private Game game;
     private int explanationTime;
+    private TimerTask currentTask;
 
     private final int SECOND = (int)TimeUnit.SECONDS.toMillis(1);
 
@@ -56,7 +59,8 @@ public class GameActivity extends AppCompatActivity {
         remainingTimeView.setText(getBeautifulTime(explanationTime));
 
         timer = new Timer();
-        timer.schedule(new First20SecondsTimerTask(), SECOND);
+        currentTask = new First20SecondsTimerTask();
+        timer.schedule(currentTask, SECOND);
 
         currentWord = game.getNextWord();
         currentWordView.setText(currentWord.getWord());
@@ -66,6 +70,7 @@ public class GameActivity extends AppCompatActivity {
 
             if (time >= explanationTime || game.getNumberOfUnfinishedWords() == 0) {
                 game.doPhase();
+                currentTask.cancel();
                 GameActivity.this.onBackPressed();
             } else {
                 if (GameHolder.gameType == GameHolder.GameType.ONE_TO_OTHERS) {
@@ -79,6 +84,7 @@ public class GameActivity extends AppCompatActivity {
         });
 
         errorButton.setOnLongClickListener(v -> {
+            currentTask.cancel();
             game.setWordAsFailed(time - beginningTimeOfCurrentWord + 1);
             game.doPhase();
             GameActivity.this.onBackPressed();
@@ -86,8 +92,10 @@ public class GameActivity extends AppCompatActivity {
         });
 
         skipButton.setOnLongClickListener(v -> {
+            currentTask.cancel();
             game.setWordAsSkipped(time - beginningTimeOfCurrentWord + 1);
             game.doPhase();
+
             GameActivity.this.onBackPressed();
             return true;
         });
@@ -108,9 +116,13 @@ public class GameActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 remainingTimeView.setText(getBeautifulTime(explanationTime - time));
                 if (time < explanationTime) {
-                    timer.schedule(new First20SecondsTimerTask(), SECOND);
+                    currentTask = new First20SecondsTimerTask();
+                    timer.schedule(currentTask, SECOND);
                 } else {
-                    timer.schedule(new Next3SecondsTimerTask(), SECOND);
+                    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(SECOND / 3);
+                    currentTask = new Next3SecondsTimerTask();
+                    timer.schedule(currentTask, SECOND);
                 }
             });
         }
@@ -124,9 +136,13 @@ public class GameActivity extends AppCompatActivity {
                 remainingTimeView.setTextColor(Color.DKGRAY);
                 remainingTimeView.setText(getBeautifulTime(time - explanationTime));
                 if (time < explanationTime + 3) {
-                    timer.schedule(new Next3SecondsTimerTask(), SECOND);
+                    currentTask = new Next3SecondsTimerTask();
+                    timer.schedule(currentTask, SECOND);
                 } else {
-                    timer.schedule(new LastTimerTask(), SECOND);
+                    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(SECOND);
+                    currentTask = new LastTimerTask();
+                    timer.scheduleAtFixedRate(currentTask, SECOND, SECOND);
                 }
             });
         }
@@ -138,7 +154,6 @@ public class GameActivity extends AppCompatActivity {
             time++;
             runOnUiThread(() -> remainingTimeView.setTextColor(Color.GRAY));
             remainingTimeView.setText(getBeautifulTime(time - explanationTime));
-            timer.schedule(new LastTimerTask(), SECOND);
         }
     }
 

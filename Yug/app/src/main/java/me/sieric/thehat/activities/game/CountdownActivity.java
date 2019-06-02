@@ -1,7 +1,9 @@
 package me.sieric.thehat.activities.game;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -48,6 +50,8 @@ public class CountdownActivity extends AppCompatActivity {
         public void run() {
             runOnUiThread(() -> {
                 countDownView.setText(getString(R.string.big_one));
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(SECOND / 2);
                 timer.schedule(new ThirdTimerTask(), SECOND / 2);
             });
         }
