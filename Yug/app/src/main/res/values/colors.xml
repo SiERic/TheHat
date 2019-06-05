@@ -12,4 +12,6 @@
     <color name="buttonTextWhite">#e1eaf6</color>
     <color name="buttonTextBlack">#000000</color>
     <color name="newWordColor">#c9d9ee</color>
+    <color name="lightItemColor">#9ccae0</color>
+    <color name="darkItemColor">#27617d</color>
 </resources>

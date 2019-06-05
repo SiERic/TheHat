@@ -11,7 +11,7 @@ import me.sieric.thehat.logic.data.Word;
 
 public abstract class Game {
 
-    protected List<Player> players = new ArrayList<>();
+    protected ArrayList<Player> players = new ArrayList<>();
     protected List<Word> words = new ArrayList<>();
     protected List<Integer> unfinishedWordsIds = new ArrayList<>();
 

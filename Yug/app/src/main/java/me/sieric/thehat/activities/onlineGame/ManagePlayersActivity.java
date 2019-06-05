@@ -1,14 +1,24 @@
 package me.sieric.thehat.activities.onlineGame;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -28,16 +38,17 @@ public class ManagePlayersActivity extends AppCompatActivity {
     private ListView playersListView;
 
     private Timer timer = new Timer();
-
     private OnlineGame onlineGame;
-    private ArrayList<String> playersNames;
 
-    private ArrayAdapter<String> adapter;
-
+    private PlayersNamesAdapter adapter;
     private final int TIME_STEP = 2000;
 
     private TimerTask task;
+    private Switch squareSwitch;
+    private ArrayList<Integer> playersPerm = new ArrayList<>();
+    private ArrayList<Integer> playersColorIds = new ArrayList<>();
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,13 +59,35 @@ public class ManagePlayersActivity extends AppCompatActivity {
         wordsNumberView = findViewById(R.id.wordsNumberView);
 
         playersListView = findViewById(R.id.playersListView);
-        playersNames = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_expandable_list_item_1, playersNames);
+        adapter = new PlayersNamesAdapter(ManagePlayersActivity.this, onlineGame.getPlayers());
         playersListView.setAdapter(adapter);
 
         task = new UpdateStatusTask();
         timer.scheduleAtFixedRate(task, 0, TIME_STEP);
+        squareSwitch = findViewById(R.id.squareSwitch);
+
+        NetworkManager.addPlayer(GameHolder.gameId, "Lol", (id) -> {});
+        NetworkManager.addPlayer(GameHolder.gameId, "Kek", (id) -> {});
+        NetworkManager.addPlayer(GameHolder.gameId, "Aidarbek", (id) -> {});
+
+        if (!GameHolder.isCreator) {
+            squareSwitch.setVisibility(View.INVISIBLE);
+            squareSwitch.setEnabled(false);
+        }
+
+        playersListView.setOnItemClickListener((parent, view, position, id) -> {
+            System.out.println("kek");
+            Toast toast = Toast.makeText(ManagePlayersActivity.this, "Kek", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            if (playersPerm.contains(position)) {
+                playersPerm.clear();
+                adapter.notifyDataSetChanged();
+            } else {
+                view.setBackgroundColor(getItemColor(playersPerm.size(), onlineGame.getPlayers().size()));
+                playersPerm.add(position);
+            }
+        });
 
         Button addWordsButton = findViewById(R.id.addWordsButton);
         addWordsButton.setOnClickListener(v -> {
@@ -74,39 +107,22 @@ public class ManagePlayersActivity extends AppCompatActivity {
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             } else {
-                if (playersNames.size() < 2) {
+                if (onlineGame.getPlayers().size() < 2) {
                     Toast toast = Toast.makeText(ManagePlayersActivity.this, "Too few players", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                     return true;
                 }
                 task.cancel();
-                ArrayList<Integer> playersPerm = new ArrayList<>();
-                for (int i = 0; i < playersNames.size(); i++) {
-                    playersPerm.add(i);
-                }
-                NetworkManager.startGame(GameHolder.gameId, playersPerm, true);
-                ArrayList<Player> players = new ArrayList<>();
-                for (int i = 0; i < playersNames.size(); i++) {
-                    players.add(new Player(playersNames.get(i)));
-                }
-                NetworkManager.allWords(GameHolder.gameId, words -> {
-                    runOnUiThread(() -> {
-                        ArrayList<Word> words_ = new ArrayList<>();
-                        for (int i = 0; i < words.size(); i++) {
-                            words_.add(new Word(-1, words.get(i)));
-                            System.out.println("!!!!!!!!!  " + words.get(i));
-                        }
-                        onlineGame.setWords(words_);
-                        onlineGame.setPlayers(players);
-                        GameHolder.game = onlineGame;
-                        Toast toast = Toast.makeText(ManagePlayersActivity.this, getString(R.string.game_started_message), Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                        Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
-                        startActivity(intent);
-                    });
-                });
+                updateWords();
+//                NetworkManager.startGame(GameHolder.gameId, playersPerm, true);
+
+                GameHolder.game = onlineGame;
+                Toast toast = Toast.makeText(ManagePlayersActivity.this, getString(R.string.game_started_message), Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
+                startActivity(intent);
             }
             return true;
         });
@@ -120,39 +136,81 @@ public class ManagePlayersActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (onlineGameStatus.getGameStatus().equals(OnlineGameStatus.GameStatus.RUNNING)) {
                         task.cancel();
-                        ArrayList<Player> players = new ArrayList<>();
-                        for (int i = 0; i < playersNames.size(); i++) {
-                            players.add(new Player(playersNames.get(i)));
-                        }
-                        NetworkManager.allPlayers(GameHolder.gameId, playersNames_ -> {
+                        NetworkManager.allPlayers(GameHolder.gameId, playersNames -> {
                             runOnUiThread(() -> {
-                                playersNames.clear();
-                                playersNames.addAll(playersNames_);
+
                             });
                         });
-                        NetworkManager.allWords(GameHolder.gameId, words -> {
-                            runOnUiThread(() -> {
-                                ArrayList<Word> words_ = new ArrayList<>();
-                                for (int i = 0; i < words.size(); i++) {
-                                    words_.add(new Word(-1, words.get(i)));
-                                }
-                                onlineGame.setWords(words_);
-                                onlineGame.setPlayers(players);
-                                Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
-                                startActivity(intent);
-                            });
-                        });
+                        updateWords();
                     }
-                    wordsNumberView.setText(String.valueOf(onlineGameStatus.getWordsNumber()));
-                });
-            });
-            NetworkManager.allPlayers(GameHolder.gameId, playersNames_ -> {
-                runOnUiThread(() -> {
-                    playersNames.clear();
-                    playersNames.addAll(playersNames_);
-                    adapter.notifyDataSetChanged();
+                    if (onlineGameStatus.getPlayersNumber() > onlineGame.getPlayers().size()) {
+                        updatePlayers();
+                    }
+                    wordsNumberView.setText(String.format(getString(R.string.words_number_format), onlineGameStatus.getWordsNumber()));
+                    onlineGame.setStatus(onlineGameStatus);
                 });
             });
         }
+    }
+
+    private void updateWords() {
+        NetworkManager.allWords(GameHolder.gameId, words -> {
+            runOnUiThread(() -> {
+                ArrayList<Word> words_ = new ArrayList<>();
+                for (int i = 0; i < words.size(); i++) {
+                    words_.add(new Word(-1, words.get(i)));
+                }
+                onlineGame.setWords(words_);
+                Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
+                startActivity(intent);
+            });
+        });
+    }
+
+    private void updatePlayers() {
+        NetworkManager.allPlayers(GameHolder.gameId, playersNames -> {
+            runOnUiThread(() -> {
+                if (playersNames.size() > onlineGame.getPlayers().size()) {
+                    onlineGame.getPlayers().clear();
+                    playersPerm.clear();
+                    playersColorIds = new ArrayList<>(playersNames.size());
+                    for (int i = 0; i < playersNames.size(); i++) {
+                        onlineGame.getPlayers().add(new Player(playersNames.get(i), i));
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        });
+    }
+
+    private class PlayersNamesAdapter extends ArrayAdapter<Player> {
+        PlayersNamesAdapter(Context context, ArrayList<Player> players) {
+            super(context, 0, players);
+        }
+
+        @NotNull
+        @Override
+        public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+            Player player = getItem(position);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.player_name, parent, false);
+            }
+            convertView.setBackgroundColor(getColor(R.color.backgroundWhite));
+            TextView nameView = convertView.findViewById(R.id.nameView);
+            assert player != null;
+            nameView.setText(player.getName());
+            return convertView;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private int getItemColor(int id, int number) {
+        if (number == 1) {
+            return getColor(R.color.lightItemColor);
+        }
+        float percent = (float) (1 - (id * 1.0 / (number - 1)));
+        Color light = Color.valueOf(getColor(R.color.lightItemColor));
+        Color dark = Color.valueOf(getColor(R.color.darkItemColor));
+        return Color.valueOf((light.red() * percent + dark.red() * (1 - percent)), (light.green() * percent + dark.green() * (1 - percent)), (light.blue() * percent + dark.blue() * (1 - percent))).toArgb();
     }
 }

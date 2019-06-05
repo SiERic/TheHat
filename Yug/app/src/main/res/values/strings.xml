@@ -96,4 +96,5 @@
     <string name="team_results_format">%d\n%d</string>
     <string name="team_names_format">%s\n%s</string>
     <string name="one_to_others">One to others game</string>
+    <string name="words_number_format">%d words</string>
 </resources>

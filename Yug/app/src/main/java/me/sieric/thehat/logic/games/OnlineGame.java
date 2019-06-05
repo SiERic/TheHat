@@ -83,4 +83,8 @@ public class OnlineGame extends Game {
         });
         return super.getWordsStats();
     }
+
+    public ArrayList<Player> getPlayers() {
+       return players;
+    }
 }
