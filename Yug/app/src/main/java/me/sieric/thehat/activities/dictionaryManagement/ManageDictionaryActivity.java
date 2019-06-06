@@ -84,15 +84,15 @@ public class ManageDictionaryActivity extends AppCompatActivity {
         saveButton.setOnLongClickListener(v -> {
             for (int i = 0; i < isChosen.size(); i++) {
                 if (!isChosen.get(i) && words.get(i).getWordId() != -1) {
-                    dbManager.remove(words.get(i).getWordId(), GameHolder.dictId);
+                    dbManager.removeWord(words.get(i).getWordId(), GameHolder.dictId);
                 }
                 if (isChosen.get(i) && words.get(i).getWordId() == -1) {
-                    dbManager.add(words.get(i).getWord(), GameHolder.dictId);
+                    dbManager.addWord(words.get(i).getWord(), GameHolder.dictId);
                 }
             }
             for (long wordId : replacedWords) {
                 if (wordId != -1) {
-                    dbManager.remove(wordId, GameHolder.dictId);
+                    dbManager.removeWord(wordId, GameHolder.dictId);
                 }
             }
             Intent intent = new Intent(ManageDictionaryActivity.this, DictionaryListActivity.class);

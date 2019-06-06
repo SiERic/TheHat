@@ -18,8 +18,8 @@ import me.sieric.thehat.R;
 public class MenuActivity extends AppCompatActivity {
 
     private TextView wordNumber;
-    private TextView playerA;
-    private TextView playerB;
+    private TextView firstPlayer;
+    private TextView secondPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,8 @@ public class MenuActivity extends AppCompatActivity {
         playButton.setOnClickListener(onClickListenerPlayAndExitButton);
         exitButton.setOnClickListener(onClickListenerPlayAndExitButton);
 
-        playerA = findViewById(R.id.firstPlayerView);
-        playerB = findViewById(R.id.secondPlayerView);
+        firstPlayer = findViewById(R.id.firstPlayerView);
+        secondPlayer = findViewById(R.id.secondPlayerView);
 
         exitButton.setOnLongClickListener(v -> {
             Intent intent = new Intent(MenuActivity.this, StatisticsActivity.class);
@@ -58,17 +58,23 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-        @Override
-        protected void onStart() {
-            super.onStart();
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-            if (GameHolder.game.getNumberOfUnfinishedWords() == 0) {
-                Intent intent = new Intent(MenuActivity.this, StatisticsActivity.class);
-                startActivity(intent);
-            } else {
-                wordNumber.setText(String.format(getString(R.string.words_remaining_format),  GameHolder.game.getNumberOfUnfinishedWords()));
-                playerA.setText(GameHolder.game.getPlayersName(GameHolder.game.getFirstPlayer()));
-                playerB.setText(GameHolder.game.getPlayersName(GameHolder.game.getSecondPlayer()));
-            }
+        if (GameHolder.game.getNumberOfUnfinishedWords() == 0) {
+            Intent intent = new Intent(MenuActivity.this, StatisticsActivity.class);
+            startActivity(intent);
+        } else {
+            wordNumber.setText(String.format(getString(R.string.words_remaining_format),  GameHolder.game.getNumberOfUnfinishedWords()));
+            firstPlayer.setText(GameHolder.game.getPlayersName(GameHolder.game.getFirstPlayer()));
+            secondPlayer.setText(GameHolder.game.getPlayersName(GameHolder.game.getSecondPlayer()));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // nothing
+    }
+
 }

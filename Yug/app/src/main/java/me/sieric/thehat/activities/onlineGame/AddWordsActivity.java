@@ -2,6 +2,7 @@ package me.sieric.thehat.activities.onlineGame;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -38,9 +39,11 @@ public class AddWordsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_online_game_add_words);
 
         wordsNumberView = findViewById(R.id.wordsNumberView);
+
 
         DBManager dbManager = new DBManager(this);
         ListView wordListView = findViewById(R.id.wordsListView);
@@ -61,9 +64,7 @@ public class AddWordsActivity extends AppCompatActivity {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show(); });
         exitButton.setOnLongClickListener(v -> {
-            Intent intent = new Intent(AddWordsActivity.this, DictionaryListActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            AddWordsActivity.this.onBackPressed();
             return true; });
 
         Button addButton = findViewById(R.id.addButton);
@@ -80,9 +81,7 @@ public class AddWordsActivity extends AppCompatActivity {
                 }
             }
             NetworkManager.addWords(GameHolder.gameId, newWords);
-            Intent intent = new Intent(AddWordsActivity.this, ManagePlayersActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            AddWordsActivity.this.onBackPressed();
             return true;
         });
 

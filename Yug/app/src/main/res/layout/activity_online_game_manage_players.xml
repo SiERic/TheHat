@@ -10,7 +10,7 @@
     <ListView
         android:id="@+id/playersListView"
         android:layout_width="312dp"
-        android:layout_height="450dp"
+        android:layout_height="420dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +49,18 @@
         android:text="@string/start_game"
         android:textColor="@color/buttonTextWhite"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Switch
+        android:id="@+id/squareSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp"
+        android:textColor="@color/textBlack"
+        android:textSize="20sp"
+        android:text="@string/square"
+        app:layout_constraintBottom_toTopOf="@+id/startGameButton"
         app:layout_constraintStart_toStartOf="parent" />
 
 

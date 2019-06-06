@@ -3,15 +3,15 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <!--<color name="colorAccent">#D81B60</color>-->
-    <color name="colorAccent">#000000</color>
+    <color name="colorAccent">#061015</color>
 
-    <color name="backgroundWhite">#f6f8fc</color>
-    <color name="buttonBackgroundBlack">#000000</color>
-    <color name="buttonBackgroundWhite">#f6f8fc</color>
-    <color name="textBlack">#000000</color>
-    <color name="buttonTextWhite">#e1eaf6</color>
-    <color name="buttonTextBlack">#000000</color>
-    <color name="newWordColor">#c9d9ee</color>
+    <color name="backgroundWhite">#f6fafc</color>
+    <color name="buttonBackgroundBlack">#061015</color>
+    <color name="buttonBackgroundWhite">#f6fafc</color>
+    <color name="textBlack">#061015</color>
+    <color name="buttonTextWhite">#e7f2f7</color>
+    <color name="buttonTextBlack">#061015</color>
+    <color name="newWordColor">#9ccae0</color>
     <color name="lightItemColor">#9ccae0</color>
     <color name="darkItemColor">#27617d</color>
 </resources>

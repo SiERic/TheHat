@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <TextView
+        android:id="@+id/nameView"
+        android:textColor="@color/textBlack"
+        android:textSize="20sp"
+        android:layout_width="280dp"
+        android:layout_height="40dp" />
+    <TextView
+        android:id="@+id/idView"
+        android:textColor="@color/textBlack"
+        android:textSize="20sp"
+        android:layout_width="80dp"
+        android:layout_height="40dp" />
+
+</LinearLayout>

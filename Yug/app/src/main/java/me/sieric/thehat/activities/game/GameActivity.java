@@ -87,7 +87,7 @@ public class GameActivity extends AppCompatActivity {
             currentTask.cancel();
             game.setWordAsFailed(time - beginningTimeOfCurrentWord + 1);
             game.doPhase();
-            GameActivity.this.onBackPressed();
+            GameActivity.this.finish();
             return true;
         });
 
@@ -95,8 +95,7 @@ public class GameActivity extends AppCompatActivity {
             currentTask.cancel();
             game.setWordAsSkipped(time - beginningTimeOfCurrentWord + 1);
             game.doPhase();
-
-            GameActivity.this.onBackPressed();
+            GameActivity.this.finish();
             return true;
         });
 
@@ -159,6 +158,11 @@ public class GameActivity extends AppCompatActivity {
 
     private String getBeautifulTime(int time) {
         return String.format(getString(R.string.time_format), time / 60, time % 60);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // nothing
     }
 
 }

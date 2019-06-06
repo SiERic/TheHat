@@ -74,7 +74,7 @@ public class DBManager extends SQLiteOpenHelper {
         long dictId = db.insert(DICTIONARIES, null, newDict);
 
         for (String word : words) {
-            add(word, dictId, db);
+            addWord(word, dictId, db);
         }
         return dictId;
     }
@@ -92,24 +92,12 @@ public class DBManager extends SQLiteOpenHelper {
         db.update(DICTIONARIES, dict, ID + " = ?", new String[] {String.valueOf(dictId)});
     }
 
-    public void addTime(int wordId, int time) {
+    public void addWord(String word, long dictId) {
         SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.query(WORDS, null, ID + " = ?", new String[] {String.valueOf(wordId)}, null, null, null);
-        if (cursor.moveToFirst()) {
-            ContentValues updWord = new ContentValues();
-            updWord.put(TIME, cursor.getInt(cursor.getColumnIndex(TIME)) + time);
-            updWord.put(COUNT, cursor.getInt(cursor.getColumnIndex(COUNT)) + 1);
-            db.update(WORDS, updWord, ID + " = ?", new String[] {String.valueOf(wordId)});
-        }
-        cursor.close();
+        addWord(word, dictId, db);
     }
 
-    public void add(String word, long dictId) {
-        SQLiteDatabase db = getWritableDatabase();
-        add(word, dictId, db);
-    }
-
-    private void add(String word, long dictId, SQLiteDatabase db) {
+    private void addWord(String word, long dictId, SQLiteDatabase db) {
         ContentValues newWord = new ContentValues();
         newWord.put(WORD, word);
         newWord.put(TIME, 0);
@@ -118,7 +106,6 @@ public class DBManager extends SQLiteOpenHelper {
         if (wordId == -1) {
             Cursor cursor = db.query(WORDS, null, WORD + " = ?", new String[] {word}, null, null, null);
             Log.d(TAG, String.valueOf(cursor.getColumnIndex(ID)));
-//            System.out.println(cursor.getColumnIndex("_id"));
             wordId = cursor.getLong(cursor.getColumnIndex(ID));
             cursor.close();
         }
@@ -128,9 +115,9 @@ public class DBManager extends SQLiteOpenHelper {
         db.insert(DICTIONARY_WORDS, null, newDictWord);
     }
 
-    public void remove(long wordId, long dictId) {
+    public void removeWord(long wordId, long dictId) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(DICTIONARY_WORDS, WORD_ID + " = ?", new String[] {String.valueOf(wordId)});
+        db.delete(DICTIONARY_WORDS, WORD_ID + " = ?" + " AND " + DICT_ID + " = ?", new String[] {String.valueOf(wordId), String.valueOf(dictId)});
     }
 
     public List<Dictionary> getDictionariesList() {
@@ -203,7 +190,11 @@ public class DBManager extends SQLiteOpenHelper {
     private static ArrayList<LocalDictionary> localDictList = new ArrayList<>();
 
     static {
-        localDictList.add(new LocalDictionary("Easy English Words", R.raw.english_easy));
-        localDictList.add(new LocalDictionary("Some Russian Words", R.raw.russian_all));
+        localDictList.add(new LocalDictionary("Easy English nouns", R.raw.english_easy));
+        localDictList.add(new LocalDictionary("Russian nouns", R.raw.russian_all));
+        localDictList.add(new LocalDictionary("English nouns", R.raw.english_nouns));
+        localDictList.add(new LocalDictionary("Esperanto nouns", R.raw.esperanto_nouns));
+        localDictList.add(new LocalDictionary("Most common French nouns", R.raw.most_common_french_nouns));
+        localDictList.add(new LocalDictionary("German nouns", R.raw.most_common_german_nouns));
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TheHat</string>
+    <string name="app_name">The Hat</string>
     <string name="title_activity_game_statistics2">GameStatistics2Activity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>

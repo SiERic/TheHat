@@ -1201,7 +1201,7 @@ public class CameraSource {
                 }
 
                 // The code below needs to run outside of synchronization, because this will allow
-                // the camera to add pending frame(s) while we are running detection on the current
+                // the camera to addWord pending frame(s) while we are running detection on the current
                 // frame.
 
                 try {

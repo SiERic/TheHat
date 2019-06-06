@@ -194,4 +194,9 @@ public class StatisticsActivity extends AppCompatActivity {
             return convertView;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        // nothing
+    }
 }

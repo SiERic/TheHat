@@ -54,26 +54,22 @@ public class MenuActivity extends AppCompatActivity {
         task = new UpdateTask();
         timer.scheduleAtFixedRate(task, 0, TIME_STEP);
 
+        if (!GameHolder.isCreator) {
+            exitButton.setVisibility(View.INVISIBLE);
+            exitButton.setClickable(false);
+        }
+
         playButton.setOnClickListener(v -> {
-            if (game.getFirstPlayer() != GameHolder.playerId) {
-                return;
-            }
             Toast toast = Toast.makeText(MenuActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         });
         playButton.setOnLongClickListener(v -> {
-            if (game.getFirstPlayer() != GameHolder.playerId) {
-                return true;
-            }
             Intent intent = new Intent(MenuActivity.this, CountdownActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
             return true;
         });
-
-        if (!GameHolder.isCreator) {
-            exitButton.setVisibility(View.INVISIBLE);
-        }
 
         exitButton.setOnClickListener(v -> {
             Toast toast = Toast.makeText(MenuActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
@@ -81,11 +77,7 @@ public class MenuActivity extends AppCompatActivity {
             toast.show();
         });
         exitButton.setOnLongClickListener(v -> {
-            if (!GameHolder.isCreator) {
-                return true;
-            }
             task.cancel();
-//            System.out.println("Lolkek");
             NetworkManager.finishGame(GameHolder.gameId);
             Intent intent = new Intent(MenuActivity.this, StatisticsActivity.class);
             startActivity(intent);
@@ -101,19 +93,18 @@ public class MenuActivity extends AppCompatActivity {
 
         if (game.getFirstPlayer() == GameHolder.playerId) {
             playButton.setVisibility(View.VISIBLE);
+            playButton.setClickable(true);
         } else {
             playButton.setVisibility(View.INVISIBLE);
+            playButton.setClickable(false);
         }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        System.out.println(game.getWords());
-//        System.out.println(GameHolder.onlineGame.getUnfinishedWordsIds());
         if (game.getNumberOfUnfinishedWords() == 0) {
             task.cancel();
-//            System.out.println("Kekekoko");
             NetworkManager.finishGame(GameHolder.gameId);
             Intent intent = new Intent(MenuActivity.this, StatisticsActivity.class);
             startActivity(intent);
@@ -150,5 +141,10 @@ public class MenuActivity extends AppCompatActivity {
                 });
             });
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // nothing
     }
 }

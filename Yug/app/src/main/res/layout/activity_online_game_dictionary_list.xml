@@ -17,12 +17,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/exitButton"
+        android:id="@+id/okButton"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        android:text="@string/exit"
+        android:text="@string/ok"
         android:background="@color/buttonBackgroundBlack"
         android:textColor="@color/buttonTextWhite"
         app:layout_constraintBottom_toBottomOf="parent"

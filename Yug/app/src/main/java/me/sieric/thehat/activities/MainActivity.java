@@ -29,20 +29,17 @@ public class MainActivity extends AppCompatActivity {
         oneToOthersButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, DictionaryListActivity.class);
             GameHolder.gameType = GameHolder.GameType.ONE_TO_OTHERS;
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });
 
         offlineGameButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, DictionaryListActivity.class);
             GameHolder.gameType = GameHolder.GameType.OFFLINE;
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });
 
         settingsButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });
 
@@ -53,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
         onlineGameButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, CreateJoinActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });
     }
