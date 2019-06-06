@@ -196,5 +196,6 @@ public class DBManager extends SQLiteOpenHelper {
         localDictList.add(new LocalDictionary("Esperanto nouns", R.raw.esperanto_nouns));
         localDictList.add(new LocalDictionary("Most common French nouns", R.raw.most_common_french_nouns));
         localDictList.add(new LocalDictionary("German nouns", R.raw.most_common_german_nouns));
+        localDictList.add(new LocalDictionary("Japanese words", R.raw.japanese_words));
     }
 }
