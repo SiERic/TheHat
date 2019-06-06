@@ -9,6 +9,7 @@ import me.sieric.thehat.logic.games.Game;
 public class OfflineGame extends Game {
 
     private int phase = 0;
+    private int playersNumber;
 
     public OfflineGame(int playersNumber, ArrayList<String> playersNames, ArrayList<Word> words, boolean isSquare) {
         this.playersNumber = playersNumber;

@@ -2,7 +2,6 @@ package me.sieric.thehat.activities.onlineGame;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -64,6 +63,8 @@ public class ManagePlayersActivity extends AppCompatActivity {
         playersListView.setAdapter(adapter);
 
         squareSwitch = findViewById(R.id.squareSwitch);
+        Button addWordsButton = findViewById(R.id.addWordsButton);
+        Button startButton = findViewById(R.id.startGameButton);
 
         NetworkManager.addPlayer(GameHolder.gameId, "Lol", (id) -> {});
         NetworkManager.addPlayer(GameHolder.gameId, "Kek", (id) -> {});
@@ -71,7 +72,9 @@ public class ManagePlayersActivity extends AppCompatActivity {
 
         if (!GameHolder.isCreator) {
             squareSwitch.setVisibility(View.INVISIBLE);
-            squareSwitch.setEnabled(false);
+            squareSwitch.setClickable(false);
+            startButton.setVisibility(View.INVISIBLE);
+            startButton.setClickable(false);
         }
 
         playersListView.setOnItemClickListener((parent, view, position, id) -> {
@@ -85,7 +88,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
                     playersColorIds.set(i, -1);
                 }
             } else {
-                playersColorIds.set(position, playersPerm.size());
+                playersColorIds.set(position, playersPerm.size() / (squareSwitch.isChecked() ? 1 : 2));
                 playersPerm.add(position);
             }
             adapter.notifyDataSetChanged();
@@ -99,45 +102,47 @@ public class ManagePlayersActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         });
 
-        Button addWordsButton = findViewById(R.id.addWordsButton);
         addWordsButton.setOnClickListener(v -> {
             Intent intent = new Intent(ManagePlayersActivity.this, DictionaryListActivity.class);
             startActivity(intent);
         });
 
-        Button startButton = findViewById(R.id.startGameButton);
         startButton.setOnClickListener(v -> {
             Toast toast = Toast.makeText(ManagePlayersActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show(); });
         startButton.setOnLongClickListener(v -> {
-            if (!GameHolder.isCreator) {
-                Toast toast = Toast.makeText(ManagePlayersActivity.this, getString(R.string.wrong_start_game_message), Toast.LENGTH_SHORT);
+            if (onlineGame.getPlayers().size() < 2) {
+                Toast toast = Toast.makeText(ManagePlayersActivity.this, "Too few players", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
-            } else {
-                if (onlineGame.getPlayers().size() < 2) {
-                    Toast toast = Toast.makeText(ManagePlayersActivity.this, "Too few players", Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                    return true;
-                }
-                task.cancel();
-                updateWords();
-                for (int i = 0; i < onlineGame.getPlayers().size(); i++) {
-                    if (!playersPerm.contains(i)) {
-                        playersPerm.add(i);
-                    }
-                }
-                NetworkManager.startGame(GameHolder.gameId, playersPerm, squareSwitch.isChecked());
-
-                GameHolder.game = onlineGame;
-                Toast toast = Toast.makeText(ManagePlayersActivity.this, getString(R.string.game_started_message), Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-                Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
-                startActivity(intent);
+                return true;
             }
+            if (playersPerm.size() != playersColorIds.size()) {
+                Toast toast = Toast.makeText(ManagePlayersActivity.this, "Set players' order", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                return true;
+            }
+            task.cancel();
+            updateWords();
+            if (!squareSwitch.isChecked()) {
+                ArrayList<Integer> newPlayersPerm = new ArrayList<>();
+                for (int i = 0; i < playersColorIds.size() / 2; i++) {
+                    newPlayersPerm.add(playersPerm.get(i * 2));
+                }
+                for (int i = 0; i < playersColorIds.size() / 2; i++) {
+                    newPlayersPerm.add(playersPerm.get(i * 2 + 1));
+                }
+                playersPerm = newPlayersPerm;
+            }
+            NetworkManager.startGame(GameHolder.gameId, playersPerm, squareSwitch.isChecked());
+            GameHolder.game = onlineGame;
+            Toast toast = Toast.makeText(ManagePlayersActivity.this, getString(R.string.game_started_message), Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
+            startActivity(intent);
             return true;
         });
 
@@ -150,21 +155,20 @@ public class ManagePlayersActivity extends AppCompatActivity {
         @Override
         public void run() {
             NetworkManager.gameStatus(GameHolder.gameId, onlineGameStatus -> {
+                onlineGame.setStatus(onlineGameStatus);
                 runOnUiThread(() -> {
                     if (onlineGameStatus.getGameStatus().equals(OnlineGameStatus.GameStatus.RUNNING)) {
                         task.cancel();
-                        NetworkManager.allPlayers(GameHolder.gameId, playersNames -> {
-                            runOnUiThread(() -> {
-
-                            });
-                        });
                         updateWords();
+                        updatePlayers();
+                        Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
+                        startActivity(intent);
+                        return;
                     }
                     if (onlineGameStatus.getPlayersNumber() > onlineGame.getPlayers().size()) {
                         updatePlayers();
                     }
                     wordsNumberView.setText(String.format(getString(R.string.words_number_format), onlineGameStatus.getWordsNumber()));
-                    onlineGame.setStatus(onlineGameStatus);
                 });
             });
         }
@@ -178,8 +182,6 @@ public class ManagePlayersActivity extends AppCompatActivity {
                     words_.add(new Word(-1, words.get(i)));
                 }
                 onlineGame.setWords(words_);
-                Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
-                startActivity(intent);
             });
         });
     }
@@ -220,7 +222,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.player_name, parent, false);
             }
-            convertView.setBackgroundColor(getItemColor(playersColorIds.get(position)));
+            convertView.setBackgroundColor(getItemColor(playersColorIds.get(position), playersColorIds.size() / (squareSwitch.isChecked() ? 1 : 2)));
             TextView nameView = convertView.findViewById(R.id.nameView);
             TextView idView = convertView.findViewById(R.id.idView);
             assert player != null;
@@ -235,22 +237,15 @@ public class ManagePlayersActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private int getItemColor(int id) {
+    private int getItemColor(int id, int number) {
         if (id == -1) {
             return getColor(R.color.backgroundWhite);
         }
-        float percent;
-        if (squareSwitch.isChecked()) {
-            if (playersColorIds.size() == 1) {
-                return getColor(R.color.lightItemColor);
-            }
-            percent = (float) (1 - (id * 1.0 / (playersColorIds.size() - 1)));
-        } else {
-            if (playersColorIds.size() == 2) {
-                return getColor(R.color.lightItemColor);
-            }
-            percent = (float) (1 - (id % (playersColorIds.size() / 2) * 1.0 / (playersColorIds.size() / 2 - 1)));
+        if (number == 1) {
+            return getColor(R.color.lightItemColor);
         }
+        float percent = (float) (1 - (id * 1.0 / (number - 1)));
+
         Color light = Color.valueOf(getColor(R.color.lightItemColor));
         Color dark = Color.valueOf(getColor(R.color.darkItemColor));
         return Color.valueOf((light.red() * percent + dark.red() * (1 - percent)), (light.green() * percent + dark.green() * (1 - percent)), (light.blue() * percent + dark.blue() * (1 - percent))).toArgb();

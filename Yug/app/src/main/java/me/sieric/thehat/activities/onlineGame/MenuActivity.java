@@ -27,7 +27,6 @@ public class MenuActivity extends AppCompatActivity {
     private TextView wordsNumberView;
     private TextView playerAView;
     private TextView playerBView;
-    private OnlineGameStatus status;
     private Timer timer;
     private TimerTask task;
     private final int TIME_STEP = 2000;
@@ -99,19 +98,8 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (game.getNumberOfUnfinishedWords() == 0) {
-            task.cancel();
-            NetworkManager.finishGame(GameHolder.gameId);
-            Intent intent = new Intent(MenuActivity.this, StatisticsActivity.class);
-            startActivity(intent);
-        }
-    }
-
     private void updateWords() {
-        NetworkManager.finishedWords(GameHolder.gameId, status.getFinishedWords() - (game.getWordsNumber() - game.getNumberOfUnfinishedWords()), finishedIds -> {
+        NetworkManager.finishedWords(GameHolder.gameId, ((OnlineGame) game).getNumberOfFinishedWords() - (game.getWordsNumber() - game.getNumberOfUnfinishedWords()), finishedIds -> {
             for (int i = 0; i < finishedIds.size(); i++) {
                 ((OnlineGame) game).setWordAsFinished(finishedIds.get(i));
             }
@@ -131,10 +119,15 @@ public class MenuActivity extends AppCompatActivity {
                         startActivity(intent);
                         return;
                     }
-                    status = onlineGameStatus;
-                    ((OnlineGame) game).setStatus(status);
-                    if (status.getFinishedWords() > (game.getWordsNumber() - game.getNumberOfUnfinishedWords())) {
+                    ((OnlineGame) game).setStatus(onlineGameStatus);
+                    if (onlineGameStatus.getFinishedWords() > (game.getWordsNumber() - game.getNumberOfUnfinishedWords())) {
                         updateWords();
+                    }
+                    if (game.getNumberOfUnfinishedWords() == 0) {
+                        task.cancel();
+                        NetworkManager.finishGame(GameHolder.gameId);
+                        Intent intent = new Intent(MenuActivity.this, StatisticsActivity.class);
+                        startActivity(intent);
                     }
                     updateView();
                 });

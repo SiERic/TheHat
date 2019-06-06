@@ -18,7 +18,6 @@ public abstract class Game {
     protected static final Random RANDOM = new Random();
     protected boolean isSquare;
     protected int wordsNumber;
-    protected int playersNumber;
 
     public Word getNextWord() {
         int index = RANDOM.nextInt(unfinishedWordsIds.size());
@@ -47,6 +46,7 @@ public abstract class Game {
     }
 
     public ArrayList<Team> getTeamsStats() {
+        int playersNumber = players.size();
         ArrayList<Team> teamsList = new ArrayList<>(playersNumber / 2);
         for (int i = 0; i < playersNumber / 2; i++) {
             teamsList.add(new Team(players.get(i).getName(), players.get(i + playersNumber / 2).getName(), players.get(i).getExplained(), players.get(i + playersNumber / 2).getExplained()));

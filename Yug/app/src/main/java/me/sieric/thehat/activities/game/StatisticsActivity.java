@@ -83,6 +83,8 @@ public class StatisticsActivity extends AppCompatActivity {
             playersListView.setAdapter(adapter);
         } else {
             ArrayList<Team> teams = game.getTeamsStats();
+            System.out.println("LOOOOOOL");
+            System.out.println(teams.size());
             teams.add(0, new Team("", "", 0, 0));
             TeamResultsAdapter adapter = new TeamResultsAdapter(this, teams);
             playersListView.setAdapter(adapter);
