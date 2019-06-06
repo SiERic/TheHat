@@ -1,7 +1,6 @@
 package me.sieric.thehat.activities.onlineGame;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,7 +38,6 @@ public class AddWordsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_online_game_add_words);
 
         wordsNumberView = findViewById(R.id.wordsNumberView);

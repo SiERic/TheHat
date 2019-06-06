@@ -23,7 +23,6 @@ public class CreateJoinActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_online_game_create_join);
 
         createButton = findViewById(R.id.createButton);
