@@ -16,6 +16,9 @@ import me.sieric.thehat.logic.game.OfflineGame;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.logic.data.Word;
 
+/**
+ * Activity to choose dictionary for offline game
+ */
 public class DictionaryListActivity extends AppCompatActivity {
 
     @Override

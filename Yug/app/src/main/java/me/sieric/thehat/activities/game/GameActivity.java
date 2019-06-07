@@ -21,6 +21,9 @@ import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.R;
 import me.sieric.thehat.logic.data.Word;
 
+/**
+ * Activity, that shows the words to player
+ */
 public class GameActivity extends AppCompatActivity {
 
     private TextView remainingTimeView;

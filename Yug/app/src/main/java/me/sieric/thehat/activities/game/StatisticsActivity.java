@@ -29,6 +29,10 @@ import me.sieric.thehat.logic.data.Player;
 import me.sieric.thehat.logic.data.Team;
 import me.sieric.thehat.logic.data.Word;
 
+/**
+ * Activity to show game statistics
+ * Provides players and words statistics
+ */
 public class StatisticsActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -94,6 +98,10 @@ public class StatisticsActivity extends AppCompatActivity {
         wordsListView.setAdapter(wordsStatsAdapter);
     }
 
+    /**
+     * Adapter for players
+     * Shows player's place, name, guessed and explained words number
+     */
     private class PlayerResultsAdapter extends ArrayAdapter<Player> {
         PlayerResultsAdapter(Context context, ArrayList<Player> players) {
             super(context, 0, players);
@@ -131,6 +139,10 @@ public class StatisticsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Adapter for teams
+     * Shows team's place, names and explained words number
+     */
     private class TeamResultsAdapter extends ArrayAdapter<Team> {
         TeamResultsAdapter(Context context, ArrayList<Team> teams) {
             super(context, 0, teams);
@@ -165,6 +177,9 @@ public class StatisticsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Adapter for
+     */
     private class WordStatsAdapter extends ArrayAdapter<Word> {
         WordStatsAdapter(Context context, ArrayList<Word> words) {
             super(context, 0, words);

@@ -146,4 +146,6 @@ public class ManagePlayersActivity extends AppCompatActivity {
         nextButton.setOnLongClickListener(onLongClickListenerNextButton);
     }
 
+
+
 }

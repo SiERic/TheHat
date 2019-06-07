@@ -30,7 +30,7 @@ public class CreateJoinActivity extends AppCompatActivity {
 
         GameHolder.gameType = GameHolder.GameType.ONLINE;
 
-        GameHolder.name = PreferenceManager.getDefaultSharedPreferences(this).getString("name", "kek");
+        GameHolder.name = PreferenceManager.getDefaultSharedPreferences(this).getString("name", "Sasha");
 
         createButton.setOnClickListener(v -> {
             String gameId = gameIdText.getText().toString();

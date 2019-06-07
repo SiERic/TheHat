@@ -65,13 +65,6 @@ public class ManagePlayersActivity extends AppCompatActivity {
         Button addWordsButton = findViewById(R.id.addWordsButton);
         Button startButton = findViewById(R.id.startGameButton);
 
-        NetworkManager.addPlayer(GameHolder.gameId, "Lol", (id) -> {
-        });
-        NetworkManager.addPlayer(GameHolder.gameId, "Kek", (id) -> {
-        });
-        NetworkManager.addPlayer(GameHolder.gameId, "Aidarbek", (id) -> {
-        });
-
         if (!GameHolder.isCreator) {
             squareSwitch.setVisibility(View.INVISIBLE);
             squareSwitch.setClickable(false);

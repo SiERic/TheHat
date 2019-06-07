@@ -14,6 +14,10 @@ import java.util.concurrent.TimeUnit;
 
 import me.sieric.thehat.R;
 
+/**
+ * Activity to show countdown before game
+ * 3 ... 2 ... 1 ... Play!
+ */
 public class CountdownActivity extends AppCompatActivity {
 
     private Timer timer;
