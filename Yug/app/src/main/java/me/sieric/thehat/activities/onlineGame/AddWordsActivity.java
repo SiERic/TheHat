@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import me.sieric.thehat.R;
@@ -49,6 +50,7 @@ public class AddWordsActivity extends AppCompatActivity {
         DBManager dbManager = new DBManager(this);
         ListView wordListView = findViewById(R.id.wordsListView);
         words = dbManager.getWordsList(GameHolder.dictId);
+        Collections.shuffle(words);
         isChosen = new ArrayList<>(words.size());
         for (int i = 0; i < words.size(); i++) {
             isChosen.add(false);
@@ -63,7 +65,7 @@ public class AddWordsActivity extends AppCompatActivity {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show(); });
         exitButton.setOnLongClickListener(v -> {
-            AddWordsActivity.this.onBackPressed();
+            finish();
             return true; });
 
         addButton.setOnClickListener(v -> {
@@ -79,7 +81,7 @@ public class AddWordsActivity extends AppCompatActivity {
                 }
             }
             NetworkManager.addWords(GameHolder.gameId, newWords);
-            AddWordsActivity.this.onBackPressed();
+            finish();
             return true;
         });
 

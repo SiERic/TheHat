@@ -38,7 +38,6 @@ import me.sieric.thehat.logic.data.Word;
 public class ManagePlayersActivity extends AppCompatActivity {
 
     private TextView wordsNumberView;
-    private ListView playersListView;
 
     private Timer timer = new Timer();
     private OnlineGame onlineGame;
@@ -59,15 +58,15 @@ public class ManagePlayersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_game_manage_players);
 
-        onlineGame = new OnlineGame();
-
         wordsNumberView = findViewById(R.id.wordsNumberView);
-        playersListView = findViewById(R.id.playersListView);
         squareSwitch = findViewById(R.id.squareSwitch);
+        ListView playersListView = findViewById(R.id.playersListView);
         Button addWordsButton = findViewById(R.id.addWordsButton);
         Button startButton = findViewById(R.id.startGameButton);
         TextView gameIdView = findViewById(R.id.gameIdView);
+
         gameIdView.setText(GameHolder.gameId);
+        onlineGame = new OnlineGame();
 
         adapter = new PlayersNamesAdapter(ManagePlayersActivity.this, onlineGame.getPlayers());
         playersListView.setAdapter(adapter);

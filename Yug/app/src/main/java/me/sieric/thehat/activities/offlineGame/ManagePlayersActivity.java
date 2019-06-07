@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import me.sieric.thehat.logic.DBManager;
 import me.sieric.thehat.logic.game.OfflineGame;
@@ -147,6 +148,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
             int wordsPerPlayer = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(ManagePlayersActivity.this).getString("words_per_player", "10"));
             GameHolder.name = PreferenceManager.getDefaultSharedPreferences(ManagePlayersActivity.this).getString("name", "kek");
             ArrayList<Word> words = dbManager.getWordsList(GameHolder.dictId);
+            Collections.shuffle(words);
             if (words.size() < playersNumber * wordsPerPlayer) {
                 Toast toast = Toast.makeText(ManagePlayersActivity.this, "There are too few words in the dictionary", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);

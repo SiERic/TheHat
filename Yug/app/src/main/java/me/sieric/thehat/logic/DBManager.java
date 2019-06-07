@@ -240,6 +240,13 @@ public class DBManager extends SQLiteOpenHelper {
     private static ArrayList<LocalDictionary> localDictList = new ArrayList<>();
 
     static {
+        localDictList.add(new LocalDictionary(R.raw.russian_sis));
+        localDictList.add(new LocalDictionary(R.raw.word_eng_high_values));
+        localDictList.add(new LocalDictionary(R.raw.word_eng_normal_values));
+        localDictList.add(new LocalDictionary(R.raw.word_eng_low_values));
+        localDictList.add(new LocalDictionary(R.raw.word_rus_high_values));
+        localDictList.add(new LocalDictionary(R.raw.word_rus_normal_values));
+        localDictList.add(new LocalDictionary(R.raw.word_rus_low_values));
         localDictList.add(new LocalDictionary(R.raw.english_easy));
         localDictList.add(new LocalDictionary(R.raw.russian_all));
         localDictList.add(new LocalDictionary(R.raw.english_nouns));

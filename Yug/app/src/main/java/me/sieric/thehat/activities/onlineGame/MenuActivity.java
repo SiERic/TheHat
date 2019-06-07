@@ -15,16 +15,19 @@ import java.util.TimerTask;
 import me.sieric.thehat.R;
 import me.sieric.thehat.activities.game.CountdownActivity;
 import me.sieric.thehat.activities.game.StatisticsActivity;
-import me.sieric.thehat.logic.game.Game;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.logic.NetworkManager;
 import me.sieric.thehat.logic.game.OnlineGame;
 
+/**
+ * Activity to show between games
+ * Shows current players names and number of remaining words
+ */
 public class MenuActivity extends AppCompatActivity {
 
     private TextView wordsNumberView;
-    private TextView playerAView;
-    private TextView playerBView;
+    private TextView firstPlayerView;
+    private TextView secondPlayerView;
     private Timer timer;
     private TimerTask task;
     private final int TIME_STEP = 2000;
@@ -39,8 +42,8 @@ public class MenuActivity extends AppCompatActivity {
         playButton = findViewById(R.id.playButton);
         Button exitButton = findViewById(R.id.exitButton);
 
-        playerAView = findViewById(R.id.firstPlayerView);
-        playerBView = findViewById(R.id.secondPlayerView);
+        firstPlayerView = findViewById(R.id.firstPlayerView);
+        secondPlayerView = findViewById(R.id.secondPlayerView);
 
         wordsNumberView = findViewById(R.id.wordsNumberView);
 
@@ -81,11 +84,14 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Updates View (current players names, words number and visibility of play button)
+     */
     private void updateView() {
         wordsNumberView.setText(String.format(getString(R.string.words_remaining_format),  game.getNumberOfUnfinishedWords()));
 
-        playerAView.setText(game.getPlayerName(game.getFirstPlayer()));
-        playerBView.setText(game.getPlayerName(game.getSecondPlayer()));
+        firstPlayerView.setText(game.getPlayerName(game.getFirstPlayer()));
+        secondPlayerView.setText(game.getPlayerName(game.getSecondPlayer()));
 
         if (game.getFirstPlayer() == GameHolder.playerId) {
             playButton.setVisibility(View.VISIBLE);
@@ -96,6 +102,9 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Removes finished words from local words "hat"
+     */
     private void updateWords() {
         NetworkManager.finishedWords(GameHolder.gameId, 0, finishedIds -> {
             for (int i = 0; i < finishedIds.size(); i++) {
@@ -104,6 +113,9 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sends request to get game status every TIME_STEP millisecondss
+     */
     private class UpdateTask extends TimerTask {
 
         @Override

@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -55,7 +56,8 @@ public class GameActivity extends AppCompatActivity {
         time = 0;
         beginningTimeOfCurrentWord = 0;
 
-        explanationTime = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("explanation_time", "20"));
+        explanationTime = Integer.parseInt(Objects.requireNonNull(
+                PreferenceManager.getDefaultSharedPreferences(this).getString("explanation_time", "20")));
         remainingTimeView.setText(getBeautifulTime(explanationTime));
 
         timer = new Timer();
@@ -69,9 +71,9 @@ public class GameActivity extends AppCompatActivity {
             game.setWordAsGuessed(time - beginningTimeOfCurrentWord + 1);
 
             if (time >= explanationTime || game.getNumberOfUnfinishedWords() == 0) {
-                game.doPhase();
                 currentTask.cancel();
-                GameActivity.this.onBackPressed();
+                game.doPhase();
+                finish();
             } else {
                 if (GameHolder.gameType == GameHolder.GameType.ONE_TO_OTHERS) {
                     time = 0;
@@ -87,7 +89,7 @@ public class GameActivity extends AppCompatActivity {
             currentTask.cancel();
             game.setWordAsFailed(time - beginningTimeOfCurrentWord + 1);
             game.doPhase();
-            GameActivity.this.finish();
+            finish();
             return true;
         });
 
@@ -95,7 +97,7 @@ public class GameActivity extends AppCompatActivity {
             currentTask.cancel();
             game.setWordAsSkipped(time - beginningTimeOfCurrentWord + 1);
             game.doPhase();
-            GameActivity.this.finish();
+            finish();
             return true;
         });
 

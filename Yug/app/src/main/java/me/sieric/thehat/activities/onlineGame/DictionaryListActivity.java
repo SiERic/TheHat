@@ -15,6 +15,9 @@ import me.sieric.thehat.logic.DBManager;
 import me.sieric.thehat.logic.data.Dictionary;
 import me.sieric.thehat.logic.GameHolder;
 
+/**
+ * Activity with dictionary list to choose words for online game
+ */
 public class DictionaryListActivity extends AppCompatActivity {
 
     @Override
