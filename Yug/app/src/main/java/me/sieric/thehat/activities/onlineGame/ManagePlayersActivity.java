@@ -31,6 +31,10 @@ import me.sieric.thehat.logic.game.OnlineGame;
 import me.sieric.thehat.logic.data.Player;
 import me.sieric.thehat.logic.data.Word;
 
+/**
+ * Activity to manage players
+ * Game creator should set players order here before starting the game
+ */
 public class ManagePlayersActivity extends AppCompatActivity {
 
     private TextView wordsNumberView;
@@ -56,14 +60,15 @@ public class ManagePlayersActivity extends AppCompatActivity {
         onlineGame = new OnlineGame();
 
         wordsNumberView = findViewById(R.id.wordsNumberView);
-
         playersListView = findViewById(R.id.playersListView);
-        adapter = new PlayersNamesAdapter(ManagePlayersActivity.this, onlineGame.getPlayers());
-        playersListView.setAdapter(adapter);
-
         squareSwitch = findViewById(R.id.squareSwitch);
         Button addWordsButton = findViewById(R.id.addWordsButton);
         Button startButton = findViewById(R.id.startGameButton);
+        TextView gameIdView = findViewById(R.id.gameIdView);
+        gameIdView.setText(GameHolder.gameId);
+
+        adapter = new PlayersNamesAdapter(ManagePlayersActivity.this, onlineGame.getPlayers());
+        playersListView.setAdapter(adapter);
 
         if (!GameHolder.isCreator) {
             squareSwitch.setVisibility(View.INVISIBLE);
@@ -106,7 +111,20 @@ public class ManagePlayersActivity extends AppCompatActivity {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         });
-        startButton.setOnLongClickListener(v -> {
+        startButton.setOnLongClickListener(new StartGameOnLongClickListener());
+
+        task = new UpdateStatusTask();
+        timer.scheduleAtFixedRate(task, 0, TIME_STEP);
+    }
+
+    /**
+     * Starts game
+     * Sends request to start game with chosen players order
+     */
+    private class StartGameOnLongClickListener implements View.OnLongClickListener {
+
+        @Override
+        public boolean onLongClick(View v) {
             if (onlineGame.getPlayers().size() < 2) {
                 Toast toast = Toast.makeText(ManagePlayersActivity.this, "Too few players", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
@@ -139,12 +157,12 @@ public class ManagePlayersActivity extends AppCompatActivity {
             Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
             startActivity(intent);
             return true;
-        });
-
-        task = new UpdateStatusTask();
-        timer.scheduleAtFixedRate(task, 0, TIME_STEP);
+        }
     }
 
+    /**
+     * Sends request to get game status every TIME_STEP milliseconds
+     */
     private class UpdateStatusTask extends TimerTask {
 
         @Override
@@ -169,6 +187,9 @@ public class ManagePlayersActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sends request (to the server) to update words
+     */
     private void updateWords() {
         NetworkManager.allWords(GameHolder.gameId, words -> {
             runOnUiThread(() -> {
@@ -181,6 +202,9 @@ public class ManagePlayersActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sends request (to the server) to update players
+     */
     private void updatePlayers() {
         NetworkManager.allPlayers(GameHolder.gameId, playersNames -> {
             runOnUiThread(() -> {
@@ -204,6 +228,10 @@ public class ManagePlayersActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Adapter for players
+     * Shows player name and serial number (for creator only)
+     */
     private class PlayersNamesAdapter extends ArrayAdapter<Player> {
         PlayersNamesAdapter(Context context, ArrayList<Player> players) {
             super(context, 0, players);
@@ -231,6 +259,12 @@ public class ManagePlayersActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Gets color to indicate players order
+     * @param id color id
+     * @param number color number
+     * @return color to indicate players order
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private int getItemColor(int id, int number) {
         if (id == -1) {

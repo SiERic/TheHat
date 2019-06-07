@@ -29,7 +29,7 @@ public class MenuActivity extends AppCompatActivity {
     private TimerTask task;
     private final int TIME_STEP = 2000;
     private Button playButton;
-    private Game game;
+    private OnlineGame game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class MenuActivity extends AppCompatActivity {
 
         wordsNumberView = findViewById(R.id.wordsNumberView);
 
-        game = GameHolder.game;
+        game = (OnlineGame) GameHolder.game;
 
         timer = new Timer();
         task = new UpdateTask();
@@ -98,9 +98,9 @@ public class MenuActivity extends AppCompatActivity {
 
     private void updateWords() {
         NetworkManager.finishedWords(GameHolder.gameId,
-                ((OnlineGame) game).getNumberOfFinishedWords() - (((OnlineGame) game).getWordsNumber() - game.getNumberOfUnfinishedWords()), finishedIds -> {
+                game.getNumberOfFinishedWords() - (game.getWordsNumber() - game.getNumberOfUnfinishedWords()), finishedIds -> {
             for (int i = 0; i < finishedIds.size(); i++) {
-                ((OnlineGame) game).setWordAsFinished(finishedIds.get(i));
+                game.setWordAsFinished(finishedIds.get(i));
             }
         });
     }
@@ -118,8 +118,8 @@ public class MenuActivity extends AppCompatActivity {
                         startActivity(intent);
                         return;
                     }
-                    ((OnlineGame) game).setStatus(onlineGameStatus);
-                    if (onlineGameStatus.getFinishedWords() > (((OnlineGame) game).getWordsNumber() - game.getNumberOfUnfinishedWords())) {
+                    game.setStatus(onlineGameStatus);
+                    if (onlineGameStatus.getFinishedWords() > (game.getWordsNumber() - game.getNumberOfUnfinishedWords())) {
                         updateWords();
                     }
                     if (game.getNumberOfUnfinishedWords() == 0) {

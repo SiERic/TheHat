@@ -59,5 +59,16 @@
         app:layout_constraintBottom_toTopOf="@+id/startGameButton"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/gameIdView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:textSize="20sp"
+        android:textColor="@color/textBlack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </android.support.constraint.ConstraintLayout>

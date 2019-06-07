@@ -55,9 +55,6 @@ public class CreateJoinActivity extends AppCompatActivity {
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         } else {
-                            Toast toast = Toast.makeText(CreateJoinActivity.this, getString(R.string.game_created_message), Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
                             GameHolder.gameId = gameId;
                             NetworkManager.addPlayer(gameId, GameHolder.name, id -> runOnUiThread(() -> {
                                 GameHolder.playerId = id;
@@ -66,6 +63,9 @@ public class CreateJoinActivity extends AppCompatActivity {
                                 Intent intent = new Intent(CreateJoinActivity.this, ManagePlayersActivity.class);
                                 startActivity(intent);
                             }));
+                            Toast toast = Toast.makeText(CreateJoinActivity.this, getString(R.string.game_created_message), Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
                         }
                     }));
         }
