@@ -174,6 +174,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
                         task.cancel();
                         updateWords();
                         updatePlayers();
+                        GameHolder.game = onlineGame;
                         Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
                         startActivity(intent);
                         return;

@@ -97,8 +97,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void updateWords() {
-        NetworkManager.finishedWords(GameHolder.gameId,
-                game.getNumberOfFinishedWords() - (game.getWordsNumber() - game.getNumberOfUnfinishedWords()), finishedIds -> {
+        NetworkManager.finishedWords(GameHolder.gameId, 0, finishedIds -> {
             for (int i = 0; i < finishedIds.size(); i++) {
                 game.setWordAsFinished(finishedIds.get(i));
             }

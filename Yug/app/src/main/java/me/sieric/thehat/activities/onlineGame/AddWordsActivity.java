@@ -1,7 +1,6 @@
 package me.sieric.thehat.activities.onlineGame;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -26,6 +25,9 @@ import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.logic.NetworkManager;
 import me.sieric.thehat.logic.data.Word;
 
+/**
+ * Activity to add words from chosen dictionary to the online game
+ */
 public class AddWordsActivity extends AppCompatActivity {
 
     private ArrayList<Boolean> isChosen;
@@ -41,7 +43,8 @@ public class AddWordsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_online_game_add_words);
 
         wordsNumberView = findViewById(R.id.wordsNumberView);
-
+        Button exitButton = findViewById(R.id.exitButton);
+        Button addButton = findViewById(R.id.addButton);
 
         DBManager dbManager = new DBManager(this);
         ListView wordListView = findViewById(R.id.wordsListView);
@@ -55,8 +58,6 @@ public class AddWordsActivity extends AppCompatActivity {
         setWordsNumber();
         wordListView.setAdapter(adapter);
 
-        Button exitButton = findViewById(R.id.exitButton);
-
         exitButton.setOnClickListener(v -> {
             Toast toast = Toast.makeText(AddWordsActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
@@ -65,7 +66,6 @@ public class AddWordsActivity extends AppCompatActivity {
             AddWordsActivity.this.onBackPressed();
             return true; });
 
-        Button addButton = findViewById(R.id.addButton);
         addButton.setOnClickListener(v -> {
             Toast toast = Toast.makeText(AddWordsActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
@@ -85,6 +85,10 @@ public class AddWordsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Words adapter
+     * Has a checkbox to add word to the game
+     */
     private class WordsAdapter extends ArrayAdapter<Word> {
         WordsAdapter(Context context, ArrayList<Word> words) {
             super(context, 0, words);
