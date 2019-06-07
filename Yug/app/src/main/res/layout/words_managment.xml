@@ -4,6 +4,7 @@
 
     <TextView
         android:id="@+id/wordView"
+        android:textColor="@color/textBlack"
         android:layout_width="272dp"
         android:layout_height="40dp"
         android:textSize="20sp" />

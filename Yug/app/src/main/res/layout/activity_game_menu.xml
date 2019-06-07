@@ -2,9 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/backgroundWhite"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/activityStyle"
     tools:context=".activities.offlineGame.MenuActivity">
 
     <TextView
@@ -12,8 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:gravity="right|center_vertical"
-        android:text="One"
+        android:gravity="end|center_vertical"
         android:textColor="@color/textBlack"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,8 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:gravity="left|center_vertical"
-        android:text="Other"
+        android:gravity="start|center_vertical"
         android:textColor="@color/textBlack"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,9 +39,8 @@
         android:layout_height="48dp"
         android:layout_marginStart="24dp"
         android:layout_marginBottom="24dp"
-        android:background="@color/buttonBackgroundBlack"
         android:text="@string/play"
-        android:textColor="@color/buttonTextWhite"
+        style="@style/darkButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -57,7 +52,7 @@
         android:layout_marginEnd="24dp"
         android:textColor="@color/textBlack"
         android:textSize="20sp"
-        android:gravity="right|center_vertical"
+        android:gravity="end|center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,9 +62,8 @@
         android:layout_height="48dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        android:background="@color/buttonBackgroundBlack"
         android:text="@string/exit"
-        android:textColor="@color/buttonTextWhite"
+        style="@style/darkButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </android.support.constraint.ConstraintLayout>

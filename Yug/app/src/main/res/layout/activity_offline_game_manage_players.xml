@@ -2,9 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/backgroundWhite"
+    style="@style/activityStyle"
     tools:context=".activities.offlineGame.ManagePlayersActivity">
 
     <TextView
@@ -49,8 +47,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:text="@string/play"
-        android:textColor="@color/buttonTextWhite"
-        android:background="@color/buttonBackgroundBlack"
+        style="@style/darkButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

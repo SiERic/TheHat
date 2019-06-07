@@ -2,10 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/backgroundWhite"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.MainActivity"
+    style="@style/activityStyle">
 
     <TextView
         android:id="@+id/gameName"
@@ -22,28 +20,26 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/oneToOthersButton"
-        android:layout_width="228dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="24dp"
-        android:background="@color/buttonBackgroundBlack"
-        android:text="@string/one_to_others"
-        android:textColor="@color/buttonTextWhite"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameName" />
-
-    <Button
         android:id="@+id/offlineGameButton"
         android:layout_width="228dp"
         android:layout_height="56dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/offline_game"
-        android:textColor="@color/buttonTextWhite"
-        android:background="@color/buttonBackgroundBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/oneToOthersButton" />
+        app:layout_constraintTop_toBottomOf="@+id/gameName"
+        style="@style/darkButtonStyle" />
+
+    <Button
+        android:id="@+id/oneToOthersButton"
+        android:layout_width="228dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/one_to_others"
+        style="@style/darkButtonStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/offlineGameButton" />
 
     <Button
         android:id="@+id/onlineGameButton"
@@ -51,11 +47,10 @@
         android:layout_height="56dp"
         android:layout_marginTop="16dp"
         android:text="@string/online_game"
-        android:textColor="@color/buttonTextWhite"
-        android:background="@color/buttonBackgroundBlack"
+        style="@style/darkButtonStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offlineGameButton" />
+        app:layout_constraintTop_toBottomOf="@+id/oneToOthersButton" />
 
     <Button
         android:id="@+id/settingsButton"
@@ -63,8 +58,7 @@
         android:layout_height="56dp"
         android:layout_marginTop="16dp"
         android:text="@string/settings"
-        android:textColor="@color/buttonTextWhite"
-        android:background="@color/buttonBackgroundBlack"
+        style="@style/darkButtonStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/onlineGameButton" />
@@ -75,8 +69,7 @@
         android:layout_height="56dp"
         android:layout_marginTop="16dp"
         android:text="@string/manage_dictionaries"
-        android:textColor="@color/buttonTextWhite"
-        android:background="@color/buttonBackgroundBlack"
+        style="@style/darkButtonStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsButton" />
