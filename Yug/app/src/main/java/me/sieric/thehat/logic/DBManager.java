@@ -221,6 +221,7 @@ public class DBManager extends SQLiteOpenHelper {
             return wordList;
         }
 
+        /** Loads dictionary from file */
         private void load() {
             wordList = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(resources.openRawResource(id)))) {

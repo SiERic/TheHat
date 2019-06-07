@@ -186,7 +186,10 @@ public class OnlineGame extends Game {
     public static class Status {
 
         public enum GameStatus {
-            CREATED, RUNNING, FINISHED, DOES_NOT_EXISTS;
+            CREATED,
+            RUNNING,
+            FINISHED,
+            DOES_NOT_EXISTS
         }
 
         private GameStatus gameStatus;
