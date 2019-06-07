@@ -60,13 +60,12 @@ public class OnlineGame extends Game {
                 words.get(unfinishedWordsIds.get(unfinishedWordsIds.size() - 1)).getWord(), time, Word.Status.USED));
     }
 
-
     /**
      * Sets words as finished (remove it from {@link Game#unfinishedWordsIds})
      * @param id given word id
      */
     public void setWordAsFinished(int id) {
-        unfinishedWordsIds.remove(id);
+        unfinishedWordsIds.remove(Integer.valueOf(id));
     }
 
     /**
@@ -74,7 +73,7 @@ public class OnlineGame extends Game {
      */
     @Override
     public void doPhase() {
-        NetworkManager.doPhase(GameHolder.gameId, phaseWords);
+        NetworkManager.doPhase(GameHolder.gameId, new ArrayList<>(phaseWords));
         phaseWords.clear();
     }
 

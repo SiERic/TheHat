@@ -35,6 +35,7 @@ public class MenuActivity extends AppCompatActivity {
         firstPlayerView = findViewById(R.id.firstPlayerView);
         secondPlayerView = findViewById(R.id.secondPlayerView);
 
+        playButton.setVisibility(View.VISIBLE);
         playButton.setOnLongClickListener(v -> {
             Intent intent = new Intent(MenuActivity.this, CountdownActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

@@ -170,7 +170,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
             NetworkManager.gameStatus(GameHolder.gameId, onlineGameStatus -> {
                 onlineGame.setStatus(onlineGameStatus);
                 runOnUiThread(() -> {
-                    if (onlineGameStatus.getGameStatus().equals(OnlineGame.Status.GameStatus.RUNNING)) {
+                    if (onlineGameStatus.getGameStatus() != OnlineGame.Status.GameStatus.CREATED) {
                         task.cancel();
                         updateWords();
                         updatePlayers();
