@@ -51,6 +51,8 @@ public class ManagePlayersActivity extends AppCompatActivity {
     private ArrayList<Integer> playersPerm = new ArrayList<>();
     private ArrayList<Integer> playersColorIds = new ArrayList<>();
 
+    private volatile int updated;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,8 +174,10 @@ public class ManagePlayersActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (onlineGameStatus.getGameStatus() != OnlineGame.Status.GameStatus.CREATED) {
                         task.cancel();
+                        updated = 0;
                         updateWords();
                         updatePlayers();
+                        while (updated < 2) {}
                         GameHolder.game = onlineGame;
                         Intent intent = new Intent(ManagePlayersActivity.this, MenuActivity.class);
                         startActivity(intent);
@@ -200,6 +204,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
                 }
                 onlineGame.setWords(words_);
             });
+            updated++;
         });
     }
 
@@ -226,6 +231,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
                     }
                 }
             });
+            updated++;
         });
     }
 
