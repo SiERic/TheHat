@@ -2,7 +2,6 @@ package me.sieric.thehat.activities.game;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 
 import me.sieric.thehat.R;
 import me.sieric.thehat.activities.MainActivity;
-import me.sieric.thehat.logic.games.Game;
+import me.sieric.thehat.logic.game.Game;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.logic.data.Player;
 import me.sieric.thehat.logic.data.Team;

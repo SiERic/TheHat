@@ -27,8 +27,7 @@ import java.util.TimerTask;
 import me.sieric.thehat.R;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.logic.NetworkManager;
-import me.sieric.thehat.logic.games.OnlineGame;
-import me.sieric.thehat.logic.games.OnlineGameStatus;
+import me.sieric.thehat.logic.game.OnlineGame;
 import me.sieric.thehat.logic.data.Player;
 import me.sieric.thehat.logic.data.Word;
 
@@ -157,7 +156,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
             NetworkManager.gameStatus(GameHolder.gameId, onlineGameStatus -> {
                 onlineGame.setStatus(onlineGameStatus);
                 runOnUiThread(() -> {
-                    if (onlineGameStatus.getGameStatus().equals(OnlineGameStatus.GameStatus.RUNNING)) {
+                    if (onlineGameStatus.getGameStatus().equals(OnlineGame.Status.GameStatus.RUNNING)) {
                         task.cancel();
                         updateWords();
                         updatePlayers();
@@ -195,7 +194,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
                     playersColorIds.clear();
                     for (int i = 0; i < playersNames.size(); i++) {
                         playersColorIds.add(-1);
-                        onlineGame.getPlayers().add(new Player(playersNames.get(i), i));
+                        onlineGame.getPlayers().add(new Player(playersNames.get(i)));
                     }
                     adapter.notifyDataSetChanged();
                     if (playersNames.size() % 2 == 1) {

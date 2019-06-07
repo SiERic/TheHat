@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 import me.sieric.thehat.logic.data.Player;
 import me.sieric.thehat.logic.data.Word;
-import me.sieric.thehat.logic.games.OnlineGameStatus;
+import me.sieric.thehat.logic.game.OnlineGame;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -58,7 +58,7 @@ public class NetworkManager {
         return new JSONObject(response.body().string());
     }
 
-    public static void gameStatus(String gameId, Consumer<OnlineGameStatus> action) {
+    public static void gameStatus(String gameId, Consumer<OnlineGame.Status> action) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(SERVER_URL + "/game_status/" + gameId)
@@ -79,9 +79,9 @@ public class NetworkManager {
                         String gameStatus = data.getString("game_status");
                         int wordsNumber = data.getInt("words_number");
                         int playersNumber = data.getInt("players_number");
-                        System.out.println(OnlineGameStatus.GameStatus.valueOf(gameStatus));
-                        if (OnlineGameStatus.GameStatus.valueOf(gameStatus) != OnlineGameStatus.GameStatus.RUNNING) {
-                            action.accept(new OnlineGameStatus(gameStatus, wordsNumber, playersNumber));
+                        System.out.println(OnlineGame.Status.GameStatus.valueOf(gameStatus));
+                        if (OnlineGame.Status.GameStatus.valueOf(gameStatus) != OnlineGame.Status.GameStatus.RUNNING) {
+                            action.accept(new OnlineGame.Status(gameStatus, wordsNumber, playersNumber));
                             return;
                         }
                         System.out.println("Oh it's running!!!");
@@ -89,10 +89,10 @@ public class NetworkManager {
                         int secondPlayer = data.getInt("second_player");
                         int finishedWords = data.getInt("finished_words");
                         boolean isSquare = data.getBoolean("is_square");
-                        action.accept(new OnlineGameStatus(gameStatus, wordsNumber, playersNumber, firstPlayer,
+                        action.accept(new OnlineGame.Status(gameStatus, wordsNumber, playersNumber, firstPlayer,
                                 secondPlayer, finishedWords, isSquare));
                     } catch (Exception e) {
-                        action.accept(new OnlineGameStatus(OnlineGameStatus.GameStatus.DOES_NOT_EXISTS.toString(), 0, 0));
+                        action.accept(new OnlineGame.Status(OnlineGame.Status.GameStatus.DOES_NOT_EXISTS.toString(), 0, 0));
                     }
                 } catch (JSONException e) {
                     Log.e(TAG, e.getMessage(), e);
@@ -327,7 +327,7 @@ public class NetworkManager {
                     JSONArray jsonStats = data.getJSONArray("stats");
                     for (int i = 0; i < jsonStats.length(); i++) {
                         JSONObject word = jsonStats.getJSONObject(i);
-                        words.add(new Word(i, "", word.getInt("time"), Word.Status.getFromString(word.getString("status"))));
+                        words.add(new Word(i, "", word.getInt("time"), Word.Status.valueOf(word.getString("status"))));
                     }
                     action.accept(words);
                 } catch (JSONException e) {

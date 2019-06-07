@@ -1,6 +1,6 @@
 package me.sieric.thehat.logic;
 
-import me.sieric.thehat.logic.games.Game;
+import me.sieric.thehat.logic.game.Game;
 
 public class GameHolder {
     public static Game game;

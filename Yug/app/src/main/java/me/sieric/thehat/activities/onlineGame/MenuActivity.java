@@ -1,7 +1,6 @@
 package me.sieric.thehat.activities.onlineGame;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -16,11 +15,10 @@ import java.util.TimerTask;
 import me.sieric.thehat.R;
 import me.sieric.thehat.activities.game.CountdownActivity;
 import me.sieric.thehat.activities.game.StatisticsActivity;
-import me.sieric.thehat.logic.games.Game;
+import me.sieric.thehat.logic.game.Game;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.logic.NetworkManager;
-import me.sieric.thehat.logic.games.OnlineGame;
-import me.sieric.thehat.logic.games.OnlineGameStatus;
+import me.sieric.thehat.logic.game.OnlineGame;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -86,8 +84,8 @@ public class MenuActivity extends AppCompatActivity {
     private void updateView() {
         wordsNumberView.setText(String.format(getString(R.string.words_remaining_format),  game.getNumberOfUnfinishedWords()));
 
-        playerAView.setText(game.getPlayersName(game.getFirstPlayer()));
-        playerBView.setText(game.getPlayersName(game.getSecondPlayer()));
+        playerAView.setText(game.getPlayerName(game.getFirstPlayer()));
+        playerBView.setText(game.getPlayerName(game.getSecondPlayer()));
 
         if (game.getFirstPlayer() == GameHolder.playerId) {
             playButton.setVisibility(View.VISIBLE);
@@ -99,7 +97,8 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void updateWords() {
-        NetworkManager.finishedWords(GameHolder.gameId, ((OnlineGame) game).getNumberOfFinishedWords() - (game.getWordsNumber() - game.getNumberOfUnfinishedWords()), finishedIds -> {
+        NetworkManager.finishedWords(GameHolder.gameId,
+                ((OnlineGame) game).getNumberOfFinishedWords() - (((OnlineGame) game).getWordsNumber() - game.getNumberOfUnfinishedWords()), finishedIds -> {
             for (int i = 0; i < finishedIds.size(); i++) {
                 ((OnlineGame) game).setWordAsFinished(finishedIds.get(i));
             }
@@ -112,7 +111,7 @@ public class MenuActivity extends AppCompatActivity {
         public void run() {
             NetworkManager.gameStatus(GameHolder.gameId, onlineGameStatus -> {
                 runOnUiThread(() -> {
-                    if (onlineGameStatus.getGameStatus() == OnlineGameStatus.GameStatus.FINISHED) {
+                    if (onlineGameStatus.getGameStatus() == OnlineGame.Status.GameStatus.FINISHED) {
                         System.out.println(onlineGameStatus.getGameStatus().toString());
                         task.cancel();
                         Intent intent = new Intent(MenuActivity.this, StatisticsActivity.class);
@@ -120,7 +119,7 @@ public class MenuActivity extends AppCompatActivity {
                         return;
                     }
                     ((OnlineGame) game).setStatus(onlineGameStatus);
-                    if (onlineGameStatus.getFinishedWords() > (game.getWordsNumber() - game.getNumberOfUnfinishedWords())) {
+                    if (onlineGameStatus.getFinishedWords() > (((OnlineGame) game).getWordsNumber() - game.getNumberOfUnfinishedWords())) {
                         updateWords();
                     }
                     if (game.getNumberOfUnfinishedWords() == 0) {

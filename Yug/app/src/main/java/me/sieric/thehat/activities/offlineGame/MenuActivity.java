@@ -1,7 +1,6 @@
 package me.sieric.thehat.activities.offlineGame;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -66,8 +65,8 @@ public class MenuActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             wordNumber.setText(String.format(getString(R.string.words_remaining_format),  GameHolder.game.getNumberOfUnfinishedWords()));
-            firstPlayer.setText(GameHolder.game.getPlayersName(GameHolder.game.getFirstPlayer()));
-            secondPlayer.setText(GameHolder.game.getPlayersName(GameHolder.game.getSecondPlayer()));
+            firstPlayer.setText(GameHolder.game.getPlayerName(GameHolder.game.getFirstPlayer()));
+            secondPlayer.setText(GameHolder.game.getPlayerName(GameHolder.game.getSecondPlayer()));
         }
     }
 

@@ -1,7 +1,6 @@
 package me.sieric.thehat.activities.onlineGame;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ import android.widget.Toast;
 import me.sieric.thehat.R;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.logic.NetworkManager;
-import me.sieric.thehat.logic.games.OnlineGameStatus;
+import me.sieric.thehat.logic.game.OnlineGame;
 
 public class CreateJoinActivity extends AppCompatActivity {
     private Button createButton;
@@ -60,8 +59,8 @@ public class CreateJoinActivity extends AppCompatActivity {
         joinButton.setOnClickListener(v -> {
             String gameId = gameIdText.getText().toString();
             NetworkManager.gameStatus(gameId, onlineGameStatus -> runOnUiThread(() -> {
-                OnlineGameStatus.GameStatus status = onlineGameStatus.getGameStatus();
-                if (status.equals(OnlineGameStatus.GameStatus.CREATED)) {
+                OnlineGame.Status.GameStatus status = onlineGameStatus.getGameStatus();
+                if (status.equals(OnlineGame.Status.GameStatus.CREATED)) {
                     Toast toast = Toast.makeText(CreateJoinActivity.this, "Successfully joined the game", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
@@ -74,7 +73,7 @@ public class CreateJoinActivity extends AppCompatActivity {
                         startActivity(intent);
                     }));
 
-                } else if (status.equals(OnlineGameStatus.GameStatus.RUNNING)) {
+                } else if (status.equals(OnlineGame.Status.GameStatus.RUNNING)) {
                     Toast toast = Toast.makeText(CreateJoinActivity.this, "Game already started", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();

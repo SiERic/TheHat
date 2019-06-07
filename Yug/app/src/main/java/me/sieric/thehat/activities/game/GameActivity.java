@@ -1,7 +1,6 @@
 package me.sieric.thehat.activities.game;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -17,7 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import me.sieric.thehat.logic.games.Game;
+import me.sieric.thehat.logic.game.Game;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.R;
 import me.sieric.thehat.logic.data.Word;

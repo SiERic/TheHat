@@ -3,6 +3,10 @@ package me.sieric.thehat.logic.data;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Data class for word
+ * Contains word id (from database), game information (time spent and status) and the word itself
+ */
 @Getter @Setter
 public class Word {
 
@@ -24,30 +28,21 @@ public class Word {
         this.time = time;
     }
 
-
     public enum Status {
         UNUSED(""),
         USED("-"),
         GUESSED("+"),
         FAILED("x");
 
-        Status(String string) {
-            this.string = string;
+        Status(String statsString) {
+            this.statsString = statsString;
         }
 
-        private String string;
+        /** String to show in statistics */
+        private String statsString;
 
         public String toStatsString() {
-            return string;
+            return statsString;
         }
-
-        public static Status getFromString(String str) {
-            if (str.equals("UNUSED")) return UNUSED;
-            if (str.equals("USED")) return USED;
-            if (str.equals("FAILED")) return FAILED;
-            if (str.equals("GUESSED")) return GUESSED;
-            return null;
-        }
-
     }
 }

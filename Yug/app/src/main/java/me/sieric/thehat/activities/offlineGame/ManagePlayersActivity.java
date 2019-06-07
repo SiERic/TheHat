@@ -2,7 +2,6 @@ package me.sieric.thehat.activities.offlineGame;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import me.sieric.thehat.logic.DBManager;
-import me.sieric.thehat.logic.games.OfflineGame;
+import me.sieric.thehat.logic.game.OfflineGame;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.R;
 import me.sieric.thehat.logic.data.Word;

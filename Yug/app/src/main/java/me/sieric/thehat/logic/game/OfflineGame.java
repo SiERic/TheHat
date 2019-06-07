@@ -1,13 +1,16 @@
-package me.sieric.thehat.logic.games;
+package me.sieric.thehat.logic.game;
 
 import java.util.ArrayList;
 
 import me.sieric.thehat.logic.data.Player;
 import me.sieric.thehat.logic.data.Word;
-import me.sieric.thehat.logic.games.Game;
 
+/**
+ * Game implementation for offline game
+ */
 public class OfflineGame extends Game {
 
+    /** current explanation number */
     private int phase = 0;
     private int playersNumber;
 
@@ -28,13 +31,14 @@ public class OfflineGame extends Game {
         }
     }
 
+    /** Special constructor for "One-to-others" game */
     public OfflineGame(ArrayList<Word> words) {
         playersNumber = 2;
         this.isSquare = true;
 
         players = new ArrayList<>(playersNumber);
         players.add(new Player("One"));
-        players.add(new Player("Other"));
+        players.add(new Player("Others"));
 
         this.words = words;
 
@@ -44,6 +48,9 @@ public class OfflineGame extends Game {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setWordAsGuessed(int time) {
         words.get(unfinishedWordsIds.get(unfinishedWordsIds.size() - 1)).setStatus(Word.Status.GUESSED);
@@ -53,6 +60,9 @@ public class OfflineGame extends Game {
         unfinishedWordsIds.remove(unfinishedWordsIds.size() - 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setWordAsFailed(int time) {
         words.get(unfinishedWordsIds.get(unfinishedWordsIds.size() - 1)).setStatus(Word.Status.FAILED);
@@ -60,21 +70,31 @@ public class OfflineGame extends Game {
         unfinishedWordsIds.remove(unfinishedWordsIds.size() - 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setWordAsSkipped(int time) {
         words.get(unfinishedWordsIds.get(unfinishedWordsIds.size() - 1)).setTime(words.get(unfinishedWordsIds.get(unfinishedWordsIds.size() - 1)).getTime() + time);
     }
 
+    /** Just increases explanation number */
     @Override
     public void doPhase() {
         phase++;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getFirstPlayer() {
         return phase % playersNumber;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getSecondPlayer() {
         if (isSquare) {

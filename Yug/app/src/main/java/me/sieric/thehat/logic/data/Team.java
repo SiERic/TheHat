@@ -2,6 +2,10 @@ package me.sieric.thehat.logic.data;
 
 import lombok.Getter;
 
+/**
+ * Data class for team (two players)
+ * Contains players names and the number of words explained by each player
+ */
 @Getter
 public class Team {
 
