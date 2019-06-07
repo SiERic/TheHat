@@ -7,7 +7,8 @@ import lombok.Setter;
  * Data class for players
  * Contains player name and the number of guessed/explained words
  */
-@Getter @Setter
+@Getter
+@Setter
 public class Player {
 
     private String name;

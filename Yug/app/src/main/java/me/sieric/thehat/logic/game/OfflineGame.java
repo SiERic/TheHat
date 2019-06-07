@@ -10,7 +10,7 @@ import me.sieric.thehat.logic.data.Word;
  */
 public class OfflineGame extends Game {
 
-    /** current explanation number */
+    /** Current explanation number */
     private int phase = 0;
     private int playersNumber;
 

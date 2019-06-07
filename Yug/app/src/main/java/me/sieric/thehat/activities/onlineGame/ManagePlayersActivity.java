@@ -65,9 +65,12 @@ public class ManagePlayersActivity extends AppCompatActivity {
         Button addWordsButton = findViewById(R.id.addWordsButton);
         Button startButton = findViewById(R.id.startGameButton);
 
-        NetworkManager.addPlayer(GameHolder.gameId, "Lol", (id) -> {});
-        NetworkManager.addPlayer(GameHolder.gameId, "Kek", (id) -> {});
-        NetworkManager.addPlayer(GameHolder.gameId, "Aidarbek", (id) -> {});
+        NetworkManager.addPlayer(GameHolder.gameId, "Lol", (id) -> {
+        });
+        NetworkManager.addPlayer(GameHolder.gameId, "Kek", (id) -> {
+        });
+        NetworkManager.addPlayer(GameHolder.gameId, "Aidarbek", (id) -> {
+        });
 
         if (!GameHolder.isCreator) {
             squareSwitch.setVisibility(View.INVISIBLE);
@@ -109,7 +112,8 @@ public class ManagePlayersActivity extends AppCompatActivity {
         startButton.setOnClickListener(v -> {
             Toast toast = Toast.makeText(ManagePlayersActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show(); });
+            toast.show();
+        });
         startButton.setOnLongClickListener(v -> {
             if (onlineGame.getPlayers().size() < 2) {
                 Toast toast = Toast.makeText(ManagePlayersActivity.this, "Too few players", Toast.LENGTH_SHORT);

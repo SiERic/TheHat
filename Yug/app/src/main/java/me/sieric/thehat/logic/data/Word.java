@@ -7,7 +7,8 @@ import lombok.Setter;
  * Data class for word
  * Contains word id (from database), game information (time spent and status) and the word itself
  */
-@Getter @Setter
+@Getter
+@Setter
 public class Word {
 
     private long wordId;
@@ -38,7 +39,9 @@ public class Word {
             this.statsString = statsString;
         }
 
-        /** String to show in statistics */
+        /**
+         * String to show in statistics
+         */
         private String statsString;
 
         public String toStatsString() {

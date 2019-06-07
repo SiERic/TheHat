@@ -7,7 +7,8 @@ import lombok.Setter;
  * Data class for dictionary
  * Contains dictionary id (from database) and name
  */
-@Getter @Setter
+@Getter
+@Setter
 public class Dictionary {
 
     private long id;

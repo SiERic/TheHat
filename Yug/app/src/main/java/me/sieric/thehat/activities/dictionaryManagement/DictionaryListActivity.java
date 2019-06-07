@@ -2,11 +2,11 @@ package me.sieric.thehat.activities.dictionaryManagement;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +23,17 @@ import me.sieric.thehat.logic.DBManager;
 import me.sieric.thehat.logic.data.Dictionary;
 import me.sieric.thehat.logic.GameHolder;
 
+/**
+ * Activity for dictionary management
+ * Provides creating, renaming and removing dictionaries via dialog
+ * Opens {@link ManageDictionaryActivity} to add/remove words
+ */
 public class DictionaryListActivity extends AppCompatActivity {
+
+    private DBManager dbManager;
+    private List<Dictionary> dictList;
+    private ArrayList<String> dictNames;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +41,16 @@ public class DictionaryListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dictionary_list);
 
         ListView dictListView = findViewById(R.id.dictListView);
-        DBManager dbManager = new DBManager(this);
+        Button exitButton = findViewById(R.id.exitButton);
+        Button newButton = findViewById(R.id.addButton);
 
-        List<Dictionary> dictList = dbManager.getDictionariesList();
-        ArrayList<String> dictNames = new ArrayList<>(dictList.size());
+        dbManager = new DBManager(this);
+        dictList = dbManager.getDictionariesList();
+        dictNames = new ArrayList<>(dictList.size());
         for (int i = 0; i < dictList.size(); i++) {
             dictNames.add(dictList.get(i).getName());
         }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+        adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, dictNames);
 
         dictListView.setAdapter(adapter);
@@ -49,10 +60,26 @@ public class DictionaryListActivity extends AppCompatActivity {
             Intent intent = new Intent(DictionaryListActivity.this, ManageDictionaryActivity.class);
             startActivity(intent);
         });
+        dictListView.setOnItemLongClickListener(new RenameRemoveOnLongClickListener());
 
-        dictListView.setOnItemLongClickListener((parent, itemClicked, position, id) -> {
+        newButton.setOnClickListener(new AddNewOnClickListener());
+
+        exitButton.setOnClickListener(v -> {
+            Intent intent = new Intent(DictionaryListActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        });
+    }
+
+    /**
+     * Opens dialog to rename/remove dictionary
+     */
+    private class RenameRemoveOnLongClickListener implements AdapterView.OnItemLongClickListener {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             AlertDialog.Builder builder = new AlertDialog.Builder(DictionaryListActivity.this);
-            builder.setTitle("Rename");
+            builder.setTitle(getString(R.string.rename));
             final View customLayout = getLayoutInflater().inflate(R.layout.changing_dialog, null);
             builder.setView(customLayout);
             builder.setPositiveButton(getString(R.string.ok), (dialog, arg1) -> {
@@ -66,9 +93,9 @@ public class DictionaryListActivity extends AppCompatActivity {
             builder.setNegativeButton(getString(R.string.cancel), (dialog, arg1) -> {
                 //
             });
-            builder.setNeutralButton("Delete", (dialog, arg1) -> {
+            builder.setNeutralButton(getString(R.string.delete), (dialog, arg1) -> {
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(DictionaryListActivity.this);
-                builder2.setTitle(String.format("Delete \"%s\" dictionary?", dictList.get(position).getName()));
+                builder2.setTitle(String.format(getString(R.string.delete_dict_ask_format), dictList.get(position).getName()));
                 final View customLayout2 = getLayoutInflater().inflate(R.layout.asking_dialog, null);
                 builder2.setView(customLayout2);
                 builder2.setPositiveButton(getString(R.string.ok), (dialog2, arg2) -> {
@@ -77,7 +104,8 @@ public class DictionaryListActivity extends AppCompatActivity {
                     dictList.remove(position);
                     dictNames.remove(position);
                     adapter.notifyDataSetChanged();
-                    Toast toast = Toast.makeText(DictionaryListActivity.this, String.format("Dictionary \"%s\" was successfully removed", removedDict.getName()), Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(DictionaryListActivity.this,
+                            String.format("Dictionary \"%s\" was successfully removed", removedDict.getName()), Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 });
@@ -90,19 +118,18 @@ public class DictionaryListActivity extends AppCompatActivity {
             AlertDialog alert = builder.create();
             alert.show();
             return true;
-        });
+        }
+    }
 
-        Button exitButton = findViewById(R.id.exitButton);
-        exitButton.setOnClickListener(v -> {
-            Intent intent = new Intent(DictionaryListActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        });
+    /**
+     * Opens dialog to create new dictionary
+     */
+    private class AddNewOnClickListener implements View.OnClickListener {
 
-        Button newButton = findViewById(R.id.addButton);
-        newButton.setOnClickListener(v -> {
+        @Override
+        public void onClick(View v) {
             AlertDialog.Builder builder = new AlertDialog.Builder(DictionaryListActivity.this);
-            builder.setTitle("Dictionary name");
+            builder.setTitle(getString(R.string.dict_name));
             final View customLayout = getLayoutInflater().inflate(R.layout.changing_dialog, null);
             builder.setView(customLayout);
             builder.setPositiveButton(getString(R.string.ok), (dialog, arg1) -> {
@@ -116,6 +143,8 @@ public class DictionaryListActivity extends AppCompatActivity {
             });
             AlertDialog alert = builder.create();
             alert.show();
-        });
+        }
     }
 }
+
+

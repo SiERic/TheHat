@@ -30,17 +30,23 @@ import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.logic.data.Word;
 import me.sieric.thehat.ocrreader.OcrCaptureActivity;
 
+/**
+ * Activity to manage dictionary
+ * Provides editing, removing and adding new words
+ */
 public class ManageDictionaryActivity extends AppCompatActivity {
+
     private static final int RC_OCR_CAPTURE = 9003;
 
+    private TextView wordsNumberView;
+
+    private int wordsNumber;
+    private DBManager dbManager;
     private ArrayList<Boolean> isChosen;
     private ArrayList<Boolean> isNew;
     private WordsAdapter adapter;
     private ArrayList<Long> replacedWords = new ArrayList<>();
     private ArrayList<Word> words;
-
-    private TextView wordsNumberView;
-    private int wordsNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +54,12 @@ public class ManageDictionaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manage_dictionary);
 
         wordsNumberView = findViewById(R.id.wordsNumberView);
+        Button exitButton = findViewById(R.id.exitButton);
+        Button saveButton = findViewById(R.id.saveButton);
+        Button addFromCameraButton = findViewById(R.id.addFromCameraButton);
+        Button addWordButton = findViewById(R.id.addWordButton);
 
-        DBManager dbManager = new DBManager(this);
+        dbManager = new DBManager(this);
         ListView wordListView = findViewById(R.id.wordsListView);
         words = dbManager.getWordsList(GameHolder.dictId);
         isChosen = new ArrayList<>(words.size());
@@ -63,8 +73,6 @@ public class ManageDictionaryActivity extends AppCompatActivity {
         setWordsNumber();
         wordListView.setAdapter(adapter);
 
-        Button exitButton = findViewById(R.id.exitButton);
-
         exitButton.setOnClickListener(v -> {
                     Toast toast = Toast.makeText(ManageDictionaryActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
@@ -75,54 +83,14 @@ public class ManageDictionaryActivity extends AppCompatActivity {
             startActivity(intent);
             return true; });
 
-        Button saveButton = findViewById(R.id.saveButton);
-
         saveButton.setOnClickListener(v -> {
             Toast toast = Toast.makeText(ManageDictionaryActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show(); });
-        saveButton.setOnLongClickListener(v -> {
-            for (int i = 0; i < isChosen.size(); i++) {
-                if (!isChosen.get(i) && words.get(i).getWordId() != -1) {
-                    dbManager.removeWord(words.get(i).getWordId(), GameHolder.dictId);
-                }
-                if (isChosen.get(i) && words.get(i).getWordId() == -1) {
-                    dbManager.addWord(words.get(i).getWord(), GameHolder.dictId);
-                }
-            }
-            for (long wordId : replacedWords) {
-                if (wordId != -1) {
-                    dbManager.removeWord(wordId, GameHolder.dictId);
-                }
-            }
-            Intent intent = new Intent(ManageDictionaryActivity.this, DictionaryListActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            return true; });
+        saveButton.setOnLongClickListener(new SaveOnLongClickListener());
 
-        Button addWordButton = findViewById(R.id.addWordButton);
-        addWordButton.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ManageDictionaryActivity.this);
-            builder.setTitle("New word");
-            final View customLayout = getLayoutInflater().inflate(R.layout.changing_dialog, null);
-            builder.setView(customLayout);
-            builder.setPositiveButton(getString(R.string.ok), (dialog, arg1) -> {
-                EditText editText = customLayout.findViewById(R.id.editText);
-                words.add(0, new Word(-1, editText.getText().toString()));
-                isChosen.add(0, true);
-                isNew.add(0, true);
-                wordsNumber++;
-                setWordsNumber();
-                adapter.notifyDataSetChanged();
-            });
-            builder.setNegativeButton(getString(R.string.cancel), (dialog, arg1) -> {
-                //
-            });
-            AlertDialog alert = builder.create();
-            alert.show();
-        });
+        addWordButton.setOnClickListener(new AddWordOnClickListener());
 
-        Button addFromCameraButton = findViewById(R.id.addFromCameraButton);
         addFromCameraButton.setOnClickListener(v -> {
             Intent intent = new Intent(ManageDictionaryActivity.this, OcrCaptureActivity.class);
             intent.putExtra(OcrCaptureActivity.AutoFocus, true);
@@ -132,6 +100,9 @@ public class ManageDictionaryActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Adds words from camera
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -160,6 +131,68 @@ public class ManageDictionaryActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Opens dialog to add new word
+     */
+    private class AddWordOnClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ManageDictionaryActivity.this);
+            builder.setTitle(getString(R.string.new_word));
+            final View customLayout = getLayoutInflater().inflate(R.layout.changing_dialog, null);
+            builder.setView(customLayout);
+            builder.setPositiveButton(getString(R.string.ok), (dialog, arg1) -> {
+                EditText editText = customLayout.findViewById(R.id.editText);
+                words.add(0, new Word(-1, editText.getText().toString()));
+                isChosen.add(0, true);
+                isNew.add(0, true);
+                wordsNumber++;
+                setWordsNumber();
+                adapter.notifyDataSetChanged();
+            });
+            builder.setNegativeButton(getString(R.string.cancel), (dialog, arg1) -> {
+                //
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
+
+
+    /**
+     * Saves words to dictionary and does back to {@link DictionaryListActivity}
+     */
+    private class SaveOnLongClickListener implements View.OnLongClickListener {
+
+        @Override
+        public boolean onLongClick(View v) {
+            for (int i = 0; i < isChosen.size(); i++) {
+                if (!isChosen.get(i) && words.get(i).getWordId() != -1) {
+                    dbManager.removeWord(words.get(i).getWordId(), GameHolder.dictId);
+                }
+                if (isChosen.get(i) && words.get(i).getWordId() == -1) {
+                    dbManager.addWord(words.get(i).getWord(), GameHolder.dictId);
+                }
+            }
+            for (long wordId : replacedWords) {
+                if (wordId != -1) {
+                    dbManager.removeWord(wordId, GameHolder.dictId);
+                }
+            }
+            Intent intent = new Intent(ManageDictionaryActivity.this, DictionaryListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            return true;
+        }
+    }
+
+
+    /**
+     * Words adapter
+     * Has a checkbox to remove word from dictionary
+     * Opens dialog to edit word (by click)
+     */
     private class WordsAdapter extends ArrayAdapter<Word> {
         private WordsAdapter(Context context, ArrayList<Word> words) {
             super(context, 0, words);

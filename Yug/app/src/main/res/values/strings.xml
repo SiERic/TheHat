@@ -97,4 +97,9 @@
     <string name="team_names_format">%s\n%s</string>
     <string name="one_to_others">One to others game</string>
     <string name="words_number_format">%d words</string>
+    <string name="rename">Rename</string>
+    <string name="delete">Delete</string>
+    <string name="dict_name">Dictionary name</string>
+    <string name="delete_dict_ask_format">Delete \"%s\" dictionary?</string>
+    <string name="new_word">New word</string>
 </resources>
