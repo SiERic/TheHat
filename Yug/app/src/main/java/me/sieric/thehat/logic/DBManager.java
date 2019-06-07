@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,9 +17,12 @@ import me.sieric.thehat.R;
 import me.sieric.thehat.logic.data.Dictionary;
 import me.sieric.thehat.logic.data.Word;
 
+/**
+ * Manager (helper) for using local database
+ * Database consists of three tables and stores information about dictionaries and words in them
+ */
 public class DBManager extends SQLiteOpenHelper {
 
-    private static final String TAG = DBManager.class.getSimpleName();
     private static final String DICTIONARIES = "Dictionaries";
     private static final String WORDS = "Words";
     private static final String DICTIONARY_WORDS = "DictionaryWords";
@@ -51,10 +53,9 @@ public class DBManager extends SQLiteOpenHelper {
                 + DICT_ID + " integer, "
                 + WORD_ID + " integer" + ");");
 
+        // loads built-in dictionaries
         for (LocalDictionary localDictionary : localDictList) {
-            Log.d(TAG, localDictionary.name);
-            System.out.println(localDictionary.name);
-            addDictionary(localDictionary.name, localDictionary.getWordList(), db);
+            addDictionary(localDictionary.getName(), localDictionary.getWordList(), db);
         }
     }
 
@@ -63,6 +64,12 @@ public class DBManager extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Adds a new dictionary to database
+     * @param dictName dictionary name
+     * @param words list of words
+     * @return new dictionary id
+     */
     public long addDictionary(String dictName, List<String> words) {
         SQLiteDatabase db = getWritableDatabase();
         return addDictionary(dictName, words, db);
@@ -79,12 +86,21 @@ public class DBManager extends SQLiteOpenHelper {
         return dictId;
     }
 
+    /**
+     * Removes dictionary
+     * @param dictId id of dictionary to remove
+     */
     public void removeDictionary(long dictId) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(DICTIONARIES, ID + " = ?", new String[] {String.valueOf(dictId)});
         db.delete(DICTIONARY_WORDS, DICT_ID + " = ?", new String[] {String.valueOf(dictId)});
     }
 
+    /**
+     * Renames dictionary
+     * @param dictId id of dictionary to rename
+     * @param newName new name
+     */
     public void renameDictionary(long dictId, String newName) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues dict = new ContentValues();
@@ -92,6 +108,11 @@ public class DBManager extends SQLiteOpenHelper {
         db.update(DICTIONARIES, dict, ID + " = ?", new String[] {String.valueOf(dictId)});
     }
 
+    /**
+     * Adds a word to the dictionary
+     * @param word word to add
+     * @param dictId id of dictionary to add word to
+     */
     public void addWord(String word, long dictId) {
         SQLiteDatabase db = getWritableDatabase();
         addWord(word, dictId, db);
@@ -105,7 +126,6 @@ public class DBManager extends SQLiteOpenHelper {
         long wordId = db.insert(WORDS, null, newWord);
         if (wordId == -1) {
             Cursor cursor = db.query(WORDS, null, WORD + " = ?", new String[] {word}, null, null, null);
-            Log.d(TAG, String.valueOf(cursor.getColumnIndex(ID)));
             wordId = cursor.getLong(cursor.getColumnIndex(ID));
             cursor.close();
         }
@@ -115,11 +135,20 @@ public class DBManager extends SQLiteOpenHelper {
         db.insert(DICTIONARY_WORDS, null, newDictWord);
     }
 
+    /**
+     * Removes a word from the dictionary
+     * @param wordId id of the word to remove
+     * @param dictId id of the dictionary to remove a word from
+     */
     public void removeWord(long wordId, long dictId) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(DICTIONARY_WORDS, WORD_ID + " = ?" + " AND " + DICT_ID + " = ?", new String[] {String.valueOf(wordId), String.valueOf(dictId)});
     }
 
+    /**
+     * Gets list of all dictionaries
+     * @return list of all dictionaries
+     */
     public List<Dictionary> getDictionariesList() {
         List<Dictionary> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -133,6 +162,11 @@ public class DBManager extends SQLiteOpenHelper {
         return list;
     }
 
+    /**
+     * Gets list of all the words in the dictionary
+     * @param dictId if of the dictionary to list the words from
+     * @return  list of all the words in the dictionary
+     */
     public ArrayList<Word> getWordsList(long dictId) {
         ArrayList<Word> list = new ArrayList<>();
 
@@ -159,29 +193,44 @@ public class DBManager extends SQLiteOpenHelper {
         return list;
     }
 
+    /**
+     * Class to interact with the local dictionaries
+     * Mostly, to load them from resources
+     */
     static class LocalDictionary {
 
         private ArrayList<String> wordList = null;
-        private String name;
+        private String name = null;
         private int id;
 
-        LocalDictionary(String name, int id) {
-            this.name = name;
+        LocalDictionary(int id) {
             this.id = id;
+        }
+
+        private String getName() {
+            if (name == null) {
+                load();
+            }
+            return name;
         }
 
         private ArrayList<String> getWordList() {
             if (wordList == null) {
-                wordList = new ArrayList<>();
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(resources.openRawResource(id)))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        wordList.add(line);
-                    }
-                    Collections.shuffle(wordList);
-                } catch (Exception ignored) {}
+                load();
             }
             return wordList;
+        }
+
+        private void load() {
+            wordList = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(resources.openRawResource(id)))) {
+                String line = reader.readLine();
+                this.name = line;
+                while ((line = reader.readLine()) != null) {
+                    wordList.add(line);
+                }
+                Collections.shuffle(wordList);
+            } catch (Exception ignored) {}
         }
 
         private static Resources resources;
@@ -190,12 +239,12 @@ public class DBManager extends SQLiteOpenHelper {
     private static ArrayList<LocalDictionary> localDictList = new ArrayList<>();
 
     static {
-        localDictList.add(new LocalDictionary("Easy English nouns", R.raw.english_easy));
-        localDictList.add(new LocalDictionary("Russian nouns", R.raw.russian_all));
-        localDictList.add(new LocalDictionary("English nouns", R.raw.english_nouns));
-        localDictList.add(new LocalDictionary("Esperanto nouns", R.raw.esperanto_nouns));
-        localDictList.add(new LocalDictionary("Most common French nouns", R.raw.most_common_french_nouns));
-        localDictList.add(new LocalDictionary("German nouns", R.raw.most_common_german_nouns));
-        localDictList.add(new LocalDictionary("Japanese words", R.raw.japanese_words));
+        localDictList.add(new LocalDictionary(R.raw.english_easy));
+        localDictList.add(new LocalDictionary(R.raw.russian_all));
+        localDictList.add(new LocalDictionary(R.raw.english_nouns));
+        localDictList.add(new LocalDictionary(R.raw.esperanto_nouns));
+        localDictList.add(new LocalDictionary(R.raw.most_common_french_nouns));
+        localDictList.add(new LocalDictionary(R.raw.most_common_german_nouns));
+        localDictList.add(new LocalDictionary(R.raw.japanese_words));
     }
 }
