@@ -56,7 +56,6 @@ public class GameActivity extends AppCompatActivity {
         beginningTimeOfCurrentWord = 0;
 
         explanationTime = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("explanation_time", "20"));
-
         remainingTimeView.setText(getBeautifulTime(explanationTime));
 
         timer = new Timer();

@@ -76,7 +76,6 @@ public class ManagePlayersActivity extends AppCompatActivity {
             if (!GameHolder.isCreator) {
                 return;
             }
-            System.out.println("kek");
             if (playersPerm.contains(position)) {
                 playersPerm.clear();
                 for (int i = 0; i < playersColorIds.size(); i++) {

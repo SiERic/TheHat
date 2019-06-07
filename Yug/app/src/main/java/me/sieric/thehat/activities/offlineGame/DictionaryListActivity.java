@@ -48,7 +48,7 @@ public class DictionaryListActivity extends AppCompatActivity {
                 ArrayList<Word> words = dbManager.getWordsList(GameHolder.dictId);
                 GameHolder.game = new OfflineGame(words);
                 intent = new Intent(DictionaryListActivity.this, MenuActivity.class);
-            } else /*if (gameType.equals("offline"))*/ {
+            } else {
                 intent = new Intent(DictionaryListActivity.this, ManagePlayersActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             }

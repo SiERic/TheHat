@@ -14,11 +14,15 @@ import me.sieric.thehat.activities.game.StatisticsActivity;
 import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.R;
 
+/**
+ * Activity to show between games
+ * Shows current players names and number of remaining words
+ */
 public class MenuActivity extends AppCompatActivity {
 
     private TextView wordNumber;
-    private TextView firstPlayer;
-    private TextView secondPlayer;
+    private TextView firstPlayerView;
+    private TextView secondPlayerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +31,9 @@ public class MenuActivity extends AppCompatActivity {
 
         Button playButton = findViewById(R.id.playButton);
         Button exitButton = findViewById(R.id.exitButton);
-
         wordNumber = findViewById(R.id.wordsNumberView);
+        firstPlayerView = findViewById(R.id.firstPlayerView);
+        secondPlayerView = findViewById(R.id.secondPlayerView);
 
         playButton.setOnLongClickListener(v -> {
             Intent intent = new Intent(MenuActivity.this, CountdownActivity.class);
@@ -37,17 +42,14 @@ public class MenuActivity extends AppCompatActivity {
             return true;
         });
 
-        View.OnClickListener onClickListenerPlayAndExitButton = v -> {
+        View.OnClickListener pressLongerOnClickListener = v -> {
             Toast toast = Toast.makeText(MenuActivity.this, getString(R.string.press_longer), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         };
 
-        playButton.setOnClickListener(onClickListenerPlayAndExitButton);
-        exitButton.setOnClickListener(onClickListenerPlayAndExitButton);
-
-        firstPlayer = findViewById(R.id.firstPlayerView);
-        secondPlayer = findViewById(R.id.secondPlayerView);
+        playButton.setOnClickListener(pressLongerOnClickListener);
+        exitButton.setOnClickListener(pressLongerOnClickListener);
 
         exitButton.setOnLongClickListener(v -> {
             Intent intent = new Intent(MenuActivity.this, StatisticsActivity.class);
@@ -65,8 +67,8 @@ public class MenuActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             wordNumber.setText(String.format(getString(R.string.words_remaining_format),  GameHolder.game.getNumberOfUnfinishedWords()));
-            firstPlayer.setText(GameHolder.game.getPlayerName(GameHolder.game.getFirstPlayer()));
-            secondPlayer.setText(GameHolder.game.getPlayerName(GameHolder.game.getSecondPlayer()));
+            firstPlayerView.setText(GameHolder.game.getPlayerName(GameHolder.game.getFirstPlayer()));
+            secondPlayerView.setText(GameHolder.game.getPlayerName(GameHolder.game.getSecondPlayer()));
         }
     }
 
@@ -74,5 +76,4 @@ public class MenuActivity extends AppCompatActivity {
     public void onBackPressed() {
         // nothing
     }
-
 }
