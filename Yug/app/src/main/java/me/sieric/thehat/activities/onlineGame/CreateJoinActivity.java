@@ -5,6 +5,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,9 +15,12 @@ import me.sieric.thehat.logic.GameHolder;
 import me.sieric.thehat.logic.NetworkManager;
 import me.sieric.thehat.logic.game.OnlineGame;
 
+/**
+ * Online game creation activity
+ * Provides creating or joining game with chosen id
+ */
 public class CreateJoinActivity extends AppCompatActivity {
-    private Button createButton;
-    private Button joinButton;
+
     private EditText gameIdText;
 
     @Override
@@ -24,15 +28,25 @@ public class CreateJoinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_game_create_join);
 
-        createButton = findViewById(R.id.createButton);
-        joinButton = findViewById(R.id.joinButton);
+        Button createButton = findViewById(R.id.createButton);
+        Button joinButton = findViewById(R.id.joinButton);
         gameIdText = findViewById(R.id.gameIdText);
 
         GameHolder.gameType = GameHolder.GameType.ONLINE;
-
         GameHolder.name = PreferenceManager.getDefaultSharedPreferences(this).getString("name", "Sasha");
 
-        createButton.setOnClickListener(v -> {
+        createButton.setOnClickListener(new CreateClickListener());
+        joinButton.setOnClickListener(new JoinClickListener());
+    }
+
+    /**
+     * Sends request to create game with entered game id
+     * If succeed, starts {@link ManagePlayersActivity}
+     */
+    private class CreateClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
             String gameId = gameIdText.getText().toString();
             NetworkManager.createGame(gameId, ok ->
                     runOnUiThread(() -> {
@@ -54,9 +68,17 @@ public class CreateJoinActivity extends AppCompatActivity {
                             }));
                         }
                     }));
-        });
+        }
+    }
 
-        joinButton.setOnClickListener(v -> {
+    /**
+     * Sends request to join game with entered game id
+     * If succeed, starts {@link ManagePlayersActivity}
+     */
+    private class JoinClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
             String gameId = gameIdText.getText().toString();
             NetworkManager.gameStatus(gameId, onlineGameStatus -> runOnUiThread(() -> {
                 OnlineGame.Status.GameStatus status = onlineGameStatus.getGameStatus();
@@ -83,6 +105,6 @@ public class CreateJoinActivity extends AppCompatActivity {
                     toast.show();
                 }
             }));
-        });
+        }
     }
 }
