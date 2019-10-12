@@ -1,0 +1,37 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="Sasha"
+        android:inputType="textCapWords"
+        android:key="name"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Owner's name" />
+
+    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+         dismiss it. -->
+    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+    <ListPreference
+        android:defaultValue="10"
+        android:entries="@array/pref_words_per_player_list"
+        android:entryValues="@array/pref_words_per_player_list"
+        android:key="words_per_player"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="Words per player" />
+
+    <ListPreference
+        android:defaultValue="20"
+        android:entries="@array/pref_explanation_time"
+        android:entryValues="@array/pref_explanation_time_values"
+        android:key="explanation_time"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="Explanation time" />
+
+
+</PreferenceScreen>
